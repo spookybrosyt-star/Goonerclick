@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiser Clicker</title>
+    <!-- Custom CSS for a fun game aesthetic -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Inter:wght@400;700&display=swap');
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #121212; /* Dark background */
+            color: #ffffff;
+            font-family: 'Inter', sans-serif;
+            text-align: center;
+            padding: 20px;
+            /* Prevent text selection entirely which can interfere with rapid clicks */
+            user-select: none; 
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none;
+        }
+
+        .game-container {
+            background: linear-gradient(145deg, #1f1f1f, #0a0a0a);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 0 5px #333;
+            max-width: 90%;
+            width: 450px; /* Slightly wider to accommodate the shop */
+        }
+
+        h1 {
+            font-family: 'Bungee Shade', cursive;
+            font-size: 2.5rem;
+            color: #ffcc00; /* Yellow title */
+            margin-bottom: 20px;
+            text-shadow: 2px 2px #cc0000;
+        }
+
+        #score-display {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #4CAF50; /* Green score */
+            transition: transform 0.1s ease-out;
+        }
+
+        #stats-bar {
+            font-size: 0.9rem;
+            color: #aaa;
+            margin-bottom: 20px;
+        }
+
+        #message-box {
+            min-height: 30px;
+            font-size: 1.2rem;
+            font-style: italic;
+            color: #e0e0e0;
+            margin-bottom: 20px;
+            opacity: 1; /* Default to visible after click, fades on next action */
+        }
+
+        #click-button {
+            width: 100%;
+            padding: 20px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #121212;
+            background: #ffcc00;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            box-shadow: 0 5px 0 #cc9900;
+            transition: all 0.1s ease-in-out;
+            text-transform: uppercase;
+            margin-bottom: 30px;
+        }
+
+        #click-button:active {
+            transform: translateY(5px);
+            box-shadow: 0 1px 0 #cc9900;
+        }
+
+        /* --- Shop Styling --- */
+        #shop-container {
+            border-top: 2px solid #333;
+            padding-top: 20px;
+            margin-bottom: 20px;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #ffcc00;
+            margin-bottom: 15px;
+            font-family: 'Bungee Shade', cursive;
+        }
+        
+        /* Upgrade Items Styling (Same as previous) */
+        .upgrade-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #222;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border-left: 5px solid #4CAF50;
+        }
+        
+        .upgrade-info { text-align: left; }
+        .upgrade-name { font-weight: bold; color: #ffffff; }
+        .upgrade-stats { font-size: 0.8rem; color: #aaa; }
+        
+        /* Buy Button Styling (Same as previous) */
+        .upgrade-buy-button {
+            padding: 10px 15px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.1s;
+        }
+        .upgrade-buy-button.can-afford {
+            background-color: #00bcd4; /* Cyan */
+            color: #121212;
+            box-shadow: 0 3px #0097a7;
+        }
+        .upgrade-buy-button.can-afford:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px #0097a7;
+        }
+        .upgrade-buy-button:disabled {
+            background-color: #666;
+            color: #333;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* --- Ascension Styling --- */
+        #ascension-container {
+            border-top: 2px solid #333;
+            padding-top: 20px;
+            color: #f7a30c; /* Orange/Gold for prestige */
+        }
+        
+        #ascend-button {
+            background-color: #f7a30c;
+            color: #121212;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 5px #a36b0d;
+            transition: all 0.1s;
+        }
+
+        #ascend-button:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px #a36b0d;
+        }
+        
+        #ascend-button:disabled {
+            background-color: #666;
+            color: #333;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        #shard-display {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <h1>Paiser Clicker</h1>
+
+        <div id="score-display">0</div>
+        <div id="stats-bar">PPC: 1 | CPS: 0</div>
+
+        <div id="message-box">Click the button to start the chaos!</div>
+
+        <button id="click-button">
+            Click Paiser!
+        </button>
+
+        <div id="shop-container">
+            <!-- Upgrades will be rendered here -->
+        </div>
+        
+        <div id="ascension-container">
+            <h2>Ascension (Prestige)</h2>
+            <div id="shard-display">Paiser Shards: 0 (0% Permanent Bonus)</div>
+            <div id="ascend-info">Reach 10 Billion Clicks to Ascend.</div>
+            <button id="ascend-button" disabled>ASCEND FOR SHARDS</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Game Constants ---
+        const GAME_STORAGE_KEY = 'paiserClickerGame';
+        const GAME_INTERVAL_MS = 50; 
+        const ASCENSION_COST = 10000000000; // 10 Billion
+        const SHARD_MULTIPLIER = 0.10; // 10% bonus per shard
+        
+        // --- Game State Variables (Base) ---
+        let score = 0; // The current score (can be float for accurate CPS income)
+        let ppcBase = 1; // Base Points Per Click (from upgrades only)
+        let cpsBase = 0; // Base Clicks Per Second (from upgrades only)
+        let paiserShards = 0; // Permanent prestige currency
+        
+        // --- Game State Variables (Derived/Final) ---
+        let ppc = 1; // Final PPC (Base * Shard Multiplier)
+        let cps = 0; // Final CPS (Base * Shard Multiplier)
+
+        // Upgrade definitions (base cost, multiplier, and what they affect)
+        const UPGRADE_DEFINITIONS = [
+            // PPC Upgrades (Tier 1)
+            { id: 'u-ppc-1', name: 'AI Optimization', baseCost: 10, costMultiplier: 1.5, count: 0, type: 'ppc', value: 1, description: '+1 Point per Click' },
+            { id: 'u-ppc-2', name: 'Quantum Clicker', baseCost: 50, costMultiplier: 1.6, count: 0, type: 'ppc', value: 5, description: '+5 Points per Click' },
+            { id: 'u-ppc-3', name: 'Neural Processor', baseCost: 300, costMultiplier: 1.7, count: 0, type: 'ppc', value: 20, description: '+20 Points per Click' },
+            { id: 'u-ppc-4', name: 'Giant\'s Finger', baseCost: 1500, costMultiplier: 1.8, count: 0, type: 'ppc', value: 100, description: '+100 Points per Click' },
+            { id: 'u-ppc-5', name: 'Merchant\'s Pact', baseCost: 10000, costMultiplier: 1.9, count: 0, type: 'ppc', value: 500, description: '+500 Points per Click' },
+            // PPC Upgrades (Tier 2)
+            { id: 'u-ppc-6', name: 'Bandit\'s Cache', baseCost: 100000, costMultiplier: 2.0, count: 0, type: 'ppc', value: 5000, description: '+5K Points per Click' },
+            { id: 'u-ppc-7', name: 'Dimensional Tap', baseCost: 1000000, costMultiplier: 2.1, count: 0, type: 'ppc', value: 50000, description: '+50K Points per Click' },
+            { id: 'u-ppc-8', name: 'Singularity Focus', baseCost: 15000000, costMultiplier: 2.2, count: 0, type: 'ppc', value: 1000000, description: '+1M Points per Click' },
+            { id: 'u-ppc-9', name: 'Cosmic Authority', baseCost: 500000000, costMultiplier: 2.3, count: 0, type: 'ppc', value: 50000000, description: '+50M Points per Click' },
+            { id: 'u-ppc-10', name: 'Omni-Presence', baseCost: 10000000000, costMultiplier: 2.5, count: 0, type: 'ppc', value: 1000000000, description: '+1B Points per Click' },
+
+            // CPS Upgrades (Tier 1)
+            { id: 'u-cps-1', name: 'Friendly Giant Labor', baseCost: 100, costMultiplier: 1.1, count: 0, type: 'cps', value: 1, description: '+1 Click per Second' },
+            { id: 'u-cps-2', name: 'Robot Minions', baseCost: 800, costMultiplier: 1.2, count: 0, type: 'cps', value: 5, description: '+5 Clicks per Second' },
+            { id: 'u-cps-3', name: 'AI Farm', baseCost: 5000, costMultiplier: 1.3, count: 0, type: 'cps', value: 30, description: '+30 Clicks per Second' },
+            { id: 'u-cps-4', name: 'Temporal Looping', baseCost: 30000, costMultiplier: 1.4, count: 0, type: 'cps', value: 150, description: '+150 Clicks per Second' },
+            { id: 'u-cps-5', name: 'Galactic Pipeline', baseCost: 200000, costMultiplier: 1.5, count: 0, type: 'cps', value: 800, description: '+800 Clicks per Second' },
+            // CPS Upgrades (Tier 2)
+            { id: 'u-cps-6', name: 'Universe Insurance', baseCost: 2000000, costMultiplier: 1.6, count: 0, type: 'cps', value: 10000, description: '+10K Clicks per Second' },
+            { id: 'u-cps-7', name: 'Infinite Feedback', baseCost: 30000000, costMultiplier: 1.7, count: 0, type: 'cps', value: 150000, description: '+150K Clicks per Second' },
+            { id: 'u-cps-8', name: 'Source Code Access', baseCost: 1000000000, costMultiplier: 1.8, count: 0, type: 'cps', value: 10000000, description: '+10M Clicks per Second' },
+            { id: 'u-cps-9', name: 'Existential Engine', baseCost: 20000000000, costMultiplier: 1.9, count: 0, type: 'cps', value: 1000000000, description: '+1B Clicks per Second' },
+            { id: 'u-cps-10', name: 'Eternal Return', baseCost: 500000000000, costMultiplier: 2.0, count: 0, type: 'cps', value: 10000000000, description: '+10B Clicks per Second' }
+        ];
+
+        // --- DOM Elements ---
+        const scoreDisplay = document.getElementById('score-display');
+        const statsBar = document.getElementById('stats-bar');
+        const clickButton = document.getElementById('click-button');
+        const messageBox = document.getElementById('message-box');
+        const shopContainer = document.getElementById('shop-container');
+        const shardDisplay = document.getElementById('shard-display');
+        const ascendButton = document.getElementById('ascend-button');
+        const ascendInfo = document.getElementById('ascend-info');
+
+        const messages = [
+            "big friendly giant",
+            "your ai no one likes you",
+            "merchant",
+            "Burger King bandit"
+        ];
+        
+        // --- Helper Functions ---
+
+        /** Calculates the current cost of an upgrade based on its count. */
+        function calculateCost(baseCost, costMultiplier, count) {
+            // Using Math.round to mitigate floating point issues with costs
+            return Math.round(baseCost * Math.pow(costMultiplier, count));
+        }
+
+        /** Formats a number to a readable string (e.g., 12345 -> 12.3K). */
+        function formatNumber(num) {
+            // Use Math.round for display, but keep score itself as a float for accuracy
+            const n = Math.round(num); 
+            if (n < 1000) return n.toFixed(0);
+            
+            // Handle very large numbers with suffixes
+            const suffixes = ['', 'K', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc'];
+            const tier = Math.floor(Math.log10(n) / 3);
+            if (tier >= suffixes.length) return n.toExponential(2); // Fallback for huge numbers
+
+            const value = n / Math.pow(1000, tier);
+            return value.toFixed(1) + suffixes[tier];
+        }
+
+        /**
+         * Selects a random message from the predefined array.
+         * @returns {string} The randomly selected message.
+         */
+        function getRandomMessage() {
+            const randomIndex = Math.floor(Math.random() * messages.length);
+            return messages[randomIndex];
+        }
+
+        // --- Core Game Logic ---
+        
+        /** Updates the derived stats (PPC and CPS) based on base stats and Paiser Shards. */
+        function updateStats() {
+            // Formula: Final Stat = Base Stat * (1 + (Paiser Shards * 0.1))
+            const multiplier = 1 + (paiserShards * SHARD_MULTIPLIER);
+            ppc = ppcBase * multiplier;
+            cps = cpsBase * multiplier;
+        }
+
+        /** Updates the UI elements (score, stats, shop, ascension) */
+        function updateUI() {
+            // --- Primary Stats ---
+            scoreDisplay.textContent = `${formatNumber(score)} Clicks`;
+            statsBar.textContent = `PPC: ${formatNumber(ppc)} | CPS: ${formatNumber(cps)}`;
+            
+            // --- Ascension UI ---
+            const shardsToGet = Math.floor(Math.sqrt(score / ASCENSION_COST));
+            const canAscend = score >= ASCENSION_COST;
+            
+            shardDisplay.textContent = `Paiser Shards: ${paiserShards} (+${(paiserShards * SHARD_MULTIPLIER * 100).toFixed(0)}% Permanent Bonus)`;
+            
+            ascendButton.disabled = !canAscend;
+            if (canAscend) {
+                ascendInfo.textContent = `Ascend now for ${shardsToGet} Paiser Shards!`;
+                ascendButton.textContent = `ASCEND FOR ${shardsToGet} SHARDS`;
+            } else {
+                const remaining = ASCENSION_COST - score;
+                ascendInfo.textContent = `Reach ${formatNumber(ASCENSION_COST)} Clicks (Need ${formatNumber(remaining)} more) to Ascend.`;
+                ascendButton.textContent = 'ASCEND';
+            }
+            
+            renderShop();
+        }
+
+        /** Handles the purchase of an upgrade */
+        function buyUpgrade(upgradeId) {
+            const upgrade = UPGRADE_DEFINITIONS.find(u => u.id === upgradeId);
+            if (!upgrade) return;
+
+            const cost = calculateCost(upgrade.baseCost, upgrade.costMultiplier, upgrade.count);
+
+            if (score >= cost) {
+                score -= cost;
+                upgrade.count++;
+                
+                // Apply effect to base stats
+                if (upgrade.type === 'ppc') {
+                    ppcBase += upgrade.value;
+                } else if (upgrade.type === 'cps') {
+                    cpsBase += upgrade.value;
+                }
+
+                messageBox.textContent = `Purchased ${upgrade.name}!`;
+                
+                updateStats();
+                updateUI();
+                saveGame();
+            } else {
+                messageBox.textContent = `Not enough clicks to buy ${upgrade.name}!`;
+                messageBox.style.color = '#ff4444';
+                setTimeout(() => { 
+                    messageBox.style.color = '#e0e0e0';
+                }, 1000);
+            }
+        }
+
+        /** Handles the Ascension mechanic */
+        function ascend() {
+            if (score < ASCENSION_COST) return;
+            
+            const shardsGained = Math.floor(Math.sqrt(score / ASCENSION_COST));
+            paiserShards += shardsGained;
+            
+            // Reset game state
+            score = 0;
+            ppcBase = 1;
+            cpsBase = 0;
+            
+            // Reset all upgrade counts
+            UPGRADE_DEFINITIONS.forEach(u => u.count = 0);
+            
+            messageBox.textContent = `ASCENDED! Gained ${shardsGained} Paiser Shards.`;
+
+            // Update stats, UI, and save the game
+            updateStats(); 
+            updateUI();
+            saveGame();
+        }
+
+        /** Renders all shop items dynamically */
+        function renderShop() {
+            const shopItemsHtml = UPGRADE_DEFINITIONS.map(upgrade => {
+                const currentCost = calculateCost(upgrade.baseCost, upgrade.costMultiplier, upgrade.count);
+                const canAfford = score >= currentCost;
+                
+                return `
+                    <div class="upgrade-item">
+                        <div class="upgrade-info">
+                            <div class="upgrade-name">${upgrade.name} (x${upgrade.count})</div>
+                            <div class="upgrade-stats">${upgrade.description} | Cost: ${formatNumber(currentCost)} Clicks</div>
+                        </div>
+                        <button 
+                            id="${upgrade.id}-buy" 
+                            class="upgrade-buy-button ${canAfford ? 'can-afford' : ''}" 
+                            ${!canAfford ? 'disabled' : ''}
+                        >
+                            Buy
+                        </button>
+                    </div>
+                `;
+            }).join('');
+
+            shopContainer.innerHTML = `<h2>Upgrades Shop</h2>${shopItemsHtml}`;
+
+            // Reattach event listeners since we just replaced the HTML
+            UPGRADE_DEFINITIONS.forEach(upgrade => {
+                const buyButton = document.getElementById(`${upgrade.id}-buy`);
+                if (buyButton) {
+                    buyButton.addEventListener('click', () => buyUpgrade(upgrade.id));
+                }
+            });
+        }
+
+        /**
+         * Handles the manual click event.
+         * Note: This function is now triggered by 'mousedown' and 'touchstart' for maximum responsiveness.
+         */
+        function handlePaiserClick(event) {
+            if (event) event.preventDefault(); 
+            
+            // console.log("Click registered!");
+
+            score += ppc;
+            
+            // Display message until next click/action
+            messageBox.textContent = getRandomMessage();
+
+            // Visual score feedback
+            scoreDisplay.style.transform = 'scale(1.1)';
+            setTimeout(() => {
+                scoreDisplay.style.transform = 'scale(1)';
+            }, 100);
+
+            updateUI();
+            saveGame(); // Save after every click to prevent loss
+        }
+        
+        // --- Persistence ---
+
+        /** Saves the current game state to localStorage. */
+        function saveGame() {
+            const gameState = {
+                score: score,
+                ppcBase: ppcBase,
+                cpsBase: cpsBase,
+                paiserShards: paiserShards,
+                upgrades: UPGRADE_DEFINITIONS.map(u => ({ id: u.id, count: u.count }))
+            };
+            try {
+                localStorage.setItem(GAME_STORAGE_KEY, JSON.stringify(gameState));
+                // console.log("Game saved.");
+            } catch (e) {
+                console.error("Could not save game state:", e);
+            }
+        }
+
+        /** Loads the game state from localStorage. */
+        function loadGame() {
+            try {
+                const savedState = localStorage.getItem(GAME_STORAGE_KEY);
+                if (savedState) {
+                    const gameState = JSON.parse(savedState);
+                    
+                    // Load primary stats, setting defaults if keys are missing from older saves
+                    score = parseFloat(gameState.score) || 0; 
+                    ppcBase = parseFloat(gameState.ppcBase) || 1; 
+                    cpsBase = parseFloat(gameState.cpsBase) || 0;
+                    paiserShards = parseInt(gameState.paiserShards) || 0; 
+
+                    // Load upgrade counts back into the definitions
+                    if (gameState.upgrades) {
+                        gameState.upgrades.forEach(savedUpgrade => {
+                            const def = UPGRADE_DEFINITIONS.find(u => u.id === savedUpgrade.id);
+                            if (def) {
+                                def.count = savedUpgrade.count;
+                            }
+                        });
+                    }
+                    console.log("Game loaded.");
+                } else {
+                    console.log("No saved game found, starting new game.");
+                }
+            } catch (e) {
+                console.error("Could not load game state:", e);
+                // Start fresh if load fails
+                score = 0; ppcBase = 1; cpsBase = 0; paiserShards = 0;
+            }
+        }
+
+        // --- Game Initialization & Loop ---
+
+        /** Main game loop for passive income and auto-save */
+        function gameLoop() {
+            // Passive Income Calculation
+            if (cps > 0) {
+                // Add a fraction of the CPS based on the interval duration (e.g., 50ms is 0.05 seconds)
+                const incomePerTick = cps * (GAME_INTERVAL_MS / 1000);
+                score += incomePerTick; 
+            }
+            
+            // Recalculate stats and update UI in the loop
+            updateStats();
+            updateUI();
+            saveGame(); 
+        }
+        
+        // Setup function to run on load
+        function initGame() {
+            loadGame();
+            
+            // ** FIX APPLIED HERE: Ensure stats are fully calculated IMMEDIATELY after load **
+            updateStats();
+            
+            // Add input listeners
+            clickButton.addEventListener('mousedown', handlePaiserClick);
+            clickButton.addEventListener('touchstart', handlePaiserClick);
+            ascendButton.addEventListener('click', ascend);
+
+            // Start the passive income and auto-save loop
+            setInterval(gameLoop, GAME_INTERVAL_MS); 
+            
+            updateUI(); // Initial UI draw
+        }
+        
+        // Start the game when the window loads
+        window.onload = initGame;
+        
+    </script>
+</body>
+</html>
