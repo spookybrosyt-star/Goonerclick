@@ -6,7 +6,8 @@
     <title>Paiser Clicker</title>
     <!-- Custom CSS for a fun game aesthetic -->
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Inter:wght@400;700&display=swap');
+        /* Bungee Shade removed, keeping Inter for consistency */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght400;700&display=swap');
         
         body {
             display: flex;
@@ -37,7 +38,8 @@
         }
 
         h1 {
-            font-family: 'Bungee Shade', cursive;
+            /* Reverted to the body font 'Inter' */
+            font-family: 'Inter', sans-serif; 
             font-size: 2.5rem;
             color: #ffcc00; /* Yellow title */
             margin-bottom: 20px;
@@ -99,10 +101,10 @@
             font-size: 1.8rem;
             color: #ffcc00;
             margin-bottom: 15px;
-            font-family: 'Bungee Shade', cursive;
+            /* Reverted to the body font 'Inter' */
+            font-family: 'Inter', sans-serif; 
         }
         
-        /* Upgrade Items Styling (Same as previous) */
         .upgrade-item {
             display: flex;
             justify-content: space-between;
@@ -111,14 +113,13 @@
             padding: 15px;
             margin-bottom: 10px;
             border-radius: 10px;
-            border-left: 5px solid #4CAF50;
+            border-left: 5px solid #4CAF50; /* Green for standard upgrades */
         }
         
         .upgrade-info { text-align: left; }
         .upgrade-name { font-weight: bold; color: #ffffff; }
         .upgrade-stats { font-size: 0.8rem; color: #aaa; }
         
-        /* Buy Button Styling (Same as previous) */
         .upgrade-buy-button {
             padding: 10px 15px;
             font-weight: bold;
@@ -143,28 +144,35 @@
             box-shadow: none;
         }
 
-        /* --- Ascension Styling --- */
+        /* --- Ascension & Shard Upgrades Styling (The NEW Evo Purple Theme) --- */
         #ascension-container {
             border-top: 2px solid #333;
             padding-top: 20px;
-            color: #f7a30c; /* Orange/Gold for prestige */
+            color: #a78bfa; /* Light purple/lavender for prestige text */
+        }
+
+        #shard-upgrades-container {
+            border: 2px dashed #9333ea; /* Deep purple dashed border */
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
         }
         
         #ascend-button {
-            background-color: #f7a30c;
+            background-color: #9333ea; /* Deep purple */
             color: #121212;
             font-weight: bold;
             padding: 10px 20px;
             border-radius: 10px;
             border: none;
             cursor: pointer;
-            box-shadow: 0 5px #a36b0d;
+            box-shadow: 0 5px #6d28d9; /* Darker purple shadow */
             transition: all 0.1s;
         }
 
         #ascend-button:active {
             transform: translateY(3px);
-            box-shadow: 0 1px #a36b0d;
+            box-shadow: 0 1px #6d28d9;
         }
         
         #ascend-button:disabled {
@@ -178,6 +186,27 @@
             font-size: 1.1rem;
             margin-bottom: 10px;
         }
+        
+        .shard-upgrade-buy {
+            background-color: #a78bfa; /* Lighter purple/lavender */
+            color: #121212;
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-weight: bold;
+            box-shadow: 0 3px #6d28d9;
+        }
+        
+        .shard-upgrade-buy:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px #6d28d9;
+        }
+        
+        .shard-upgrade-buy:disabled {
+            background-color: #666;
+            color: #333;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
 
     </style>
 </head>
@@ -186,7 +215,7 @@
     <div class="game-container">
         <h1>Paiser Clicker</h1>
 
-        <div id="score-display">0</div>
+        <div id="score-display">0 Coins</div>
         <div id="stats-bar">PPC: 1 | CPS: 0</div>
 
         <div id="message-box">Click the button to start the chaos!</div>
@@ -200,29 +229,46 @@
         </div>
         
         <div id="ascension-container">
-            <h2>Ascension (Prestige)</h2>
-            <div id="shard-display">Paiser Shards: 0 (0% Permanent Bonus)</div>
-            <div id="ascend-info">Reach 10 Billion Clicks to Ascend.</div>
+            <h2>Ascension & Evo Shards</h2>
+            
+            <div id="shard-upgrades-container">
+                <!-- Shard Upgrade 1 (Evo Core Buff) -->
+                <div id="shard-display">Evo Shards: 0 (0% Permanent Bonus)</div>
+                <div class="upgrade-item" style="border-left-color: #9333ea; margin-bottom: 15px;">
+                    <div class="upgrade-info">
+                        <div class="upgrade-name">Evo Core Buff (x<span id="evo-buff-level">1</span>)</div>
+                        <div class="upgrade-stats">Multiplies all standard upgrade effects by **x5** per level.</div>
+                    </div>
+                    <button id="buy-shard-upgrade" class="shard-upgrade-buy" disabled>
+                        Buy (5 Shards)
+                    </button>
+                </div>
+            </div>
+            
+            <div id="ascend-info">Reach 10 Billion Coins to Ascend.</div>
             <button id="ascend-button" disabled>ASCEND FOR SHARDS</button>
         </div>
     </div>
 
     <script>
         // --- Game Constants ---
-        const GAME_STORAGE_KEY = 'paiserClickerGame';
+        // Retaining old key for save compatibility, but display name is now 'Coins'
+        const GAME_STORAGE_KEY = 'ecoClickerGame'; 
         const GAME_INTERVAL_MS = 50; 
         const ASCENSION_COST = 10000000000; // 10 Billion
         const SHARD_MULTIPLIER = 0.10; // 10% bonus per shard
+        const EVO_UPGRADE_1_COST = 5; // Cost in Evo Shards
         
         // --- Game State Variables (Base) ---
-        let score = 0; // The current score (can be float for accurate CPS income)
-        let ppcBase = 1; // Base Points Per Click (from upgrades only)
-        let cpsBase = 0; // Base Clicks Per Second (from upgrades only)
-        let paiserShards = 0; // Permanent prestige currency
+        let score = 0; // The current score (Coins)
+        let ppcBaseSum = 1; // Sum of base PPC values from all standard upgrades
+        let cpsBaseSum = 0; // Sum of base CPS values from all standard upgrades
+        let evoShards = 0; // Permanent prestige currency
+        let evoUpgrade1Count = 0; // Count of the shard-bought x5 multiplier upgrade
         
         // --- Game State Variables (Derived/Final) ---
-        let ppc = 1; // Final PPC (Base * Shard Multiplier)
-        let cps = 0; // Final CPS (Base * Shard Multiplier)
+        let ppc = 1; // Final PPC
+        let cps = 0; // Final CPS
 
         // Upgrade definitions (base cost, multiplier, and what they affect)
         const UPGRADE_DEFINITIONS = [
@@ -250,7 +296,11 @@
             { id: 'u-cps-7', name: 'Infinite Feedback', baseCost: 30000000, costMultiplier: 1.7, count: 0, type: 'cps', value: 150000, description: '+150K Clicks per Second' },
             { id: 'u-cps-8', name: 'Source Code Access', baseCost: 1000000000, costMultiplier: 1.8, count: 0, type: 'cps', value: 10000000, description: '+10M Clicks per Second' },
             { id: 'u-cps-9', name: 'Existential Engine', baseCost: 20000000000, costMultiplier: 1.9, count: 0, type: 'cps', value: 1000000000, description: '+1B Clicks per Second' },
-            { id: 'u-cps-10', name: 'Eternal Return', baseCost: 500000000000, costMultiplier: 2.0, count: 0, type: 'cps', value: 10000000000, description: '+10B Clicks per Second' }
+            { id: 'u-cps-10', name: 'Eternal Return', baseCost: 500000000000, costMultiplier: 2.0, count: 0, type: 'cps', value: 10000000000, description: '+10B Clicks per Second' },
+            
+            // --- Hyper-Fusion Core (x2 Global Multiplier) ---
+            // 500 Quadrillion Coins = 500,000,000,000,000,000 or 5e17
+            { id: 'hyper-fusion-core', name: 'Hyper-Fusion Core (x2 Global)', baseCost: 5e17, costMultiplier: 10, count: 0, type: 'global-multiplier', value: 2, description: 'Multiplies all final PPC/CPS by x2 (per level)' },
         ];
 
         // --- DOM Elements ---
@@ -262,12 +312,15 @@
         const shardDisplay = document.getElementById('shard-display');
         const ascendButton = document.getElementById('ascend-button');
         const ascendInfo = document.getElementById('ascend-info');
+        const buyShardUpgradeButton = document.getElementById('buy-shard-upgrade');
+        const evoBuffLevelSpan = document.getElementById('evo-buff-level');
 
         const messages = [
             "big friendly giant",
             "your ai no one likes you",
             "merchant",
-            "Burger King bandit"
+            "Burger King bandit",
+            "R.I.P CHAIR" // Added punchline
         ];
         
         // --- Helper Functions ---
@@ -301,43 +354,86 @@
             const randomIndex = Math.floor(Math.random() * messages.length);
             return messages[randomIndex];
         }
+        
+        /** Recalculates the base stats (ppcBaseSum and cpsBaseSum) from all purchased standard upgrades. */
+        function recalculateBaseStats() {
+            ppcBaseSum = 1; // Start with 1 base click power
+            cpsBaseSum = 0;
+            
+            UPGRADE_DEFINITIONS.forEach(u => {
+                if (u.type === 'ppc') {
+                    ppcBaseSum += u.count * u.value;
+                } else if (u.type === 'cps') {
+                    cpsBaseSum += u.count * u.value;
+                }
+                // Skip 'global-multiplier' type here, it's applied later
+            });
+        }
+
 
         // --- Core Game Logic ---
         
-        /** Updates the derived stats (PPC and CPS) based on base stats and Paiser Shards. */
+        /** Updates the derived stats (PPC and CPS) based on base stats and multipliers. */
         function updateStats() {
-            // Formula: Final Stat = Base Stat * (1 + (Paiser Shards * 0.1))
-            const multiplier = 1 + (paiserShards * SHARD_MULTIPLIER);
-            ppc = ppcBase * multiplier;
-            cps = cpsBase * multiplier;
+            // 1. Get base stats (sum of all purchased standard upgrades)
+            recalculateBaseStats(); 
+
+            // 2. Apply Evo Upgrade 1 (Shard-bought x5 multiplier to Base stats)
+            // The buff is 5x per level: 1x (level 0), 5x (level 1), 25x (level 2), etc.
+            const baseMultiplier = Math.pow(5, evoUpgrade1Count);
+            let tempPpc = ppcBaseSum * baseMultiplier;
+            let tempCps = cpsBaseSum * baseMultiplier;
+
+            // 3. Apply Evo Shard (Ascension) bonus
+            // The bonus is 10% per shard: 1.0 (0 shards), 1.1 (1 shard), 1.2 (2 shards), etc.
+            const shardMultiplier = 1 + (evoShards * SHARD_MULTIPLIER);
+            tempPpc *= shardMultiplier;
+            tempCps *= shardMultiplier;
+
+            // 4. Apply Eco Upgrade 2 (Hyper-Fusion Core x2 multiplier to Final stats)
+            const hyperUpgrade = UPGRADE_DEFINITIONS.find(u => u.id === 'hyper-fusion-core');
+            const hyperMultiplier = Math.pow(2, hyperUpgrade ? hyperUpgrade.count : 0);
+            
+            ppc = tempPpc * hyperMultiplier;
+            cps = tempCps * hyperMultiplier;
         }
 
         /** Updates the UI elements (score, stats, shop, ascension) */
         function updateUI() {
+            const coinLabel = ' Coins'; // Use ' Coins' consistently
+            
             // --- Primary Stats ---
-            scoreDisplay.textContent = `${formatNumber(score)} Clicks`;
+            scoreDisplay.textContent = `${formatNumber(score)}${coinLabel}`;
             statsBar.textContent = `PPC: ${formatNumber(ppc)} | CPS: ${formatNumber(cps)}`;
             
             // --- Ascension UI ---
             const shardsToGet = Math.floor(Math.sqrt(score / ASCENSION_COST));
             const canAscend = score >= ASCENSION_COST;
             
-            shardDisplay.textContent = `Paiser Shards: ${paiserShards} (+${(paiserShards * SHARD_MULTIPLIER * 100).toFixed(0)}% Permanent Bonus)`;
+            shardDisplay.textContent = `Evo Shards: ${evoShards} (+${(evoShards * SHARD_MULTIPLIER * 100).toFixed(0)}% Permanent Bonus)`;
+            evoBuffLevelSpan.textContent = Math.pow(5, evoUpgrade1Count);
             
             ascendButton.disabled = !canAscend;
             if (canAscend) {
-                ascendInfo.textContent = `Ascend now for ${shardsToGet} Paiser Shards!`;
+                ascendInfo.textContent = `Ascend now for ${shardsToGet} Evo Shards!`;
                 ascendButton.textContent = `ASCEND FOR ${shardsToGet} SHARDS`;
             } else {
                 const remaining = ASCENSION_COST - score;
-                ascendInfo.textContent = `Reach ${formatNumber(ASCENSION_COST)} Clicks (Need ${formatNumber(remaining)} more) to Ascend.`;
+                ascendInfo.textContent = `Reach ${formatNumber(ASCENSION_COST)}${coinLabel} (Need ${formatNumber(remaining)} more) to Ascend.`;
                 ascendButton.textContent = 'ASCEND';
             }
             
+            // --- Shard Upgrade UI ---
+            const canBuyShardUpgrade = evoShards >= EVO_UPGRADE_1_COST;
+            buyShardUpgradeButton.disabled = !canBuyShardUpgrade;
+            buyShardUpgradeButton.textContent = canBuyShardUpgrade 
+                ? `Buy (${EVO_UPGRADE_1_COST} Shards)` 
+                : `Need ${EVO_UPGRADE_1_COST - evoShards} more Shards`;
+
             renderShop();
         }
 
-        /** Handles the purchase of an upgrade */
+        /** Handles the purchase of a coin-based upgrade */
         function buyUpgrade(upgradeId) {
             const upgrade = UPGRADE_DEFINITIONS.find(u => u.id === upgradeId);
             if (!upgrade) return;
@@ -348,20 +444,34 @@
                 score -= cost;
                 upgrade.count++;
                 
-                // Apply effect to base stats
-                if (upgrade.type === 'ppc') {
-                    ppcBase += upgrade.value;
-                } else if (upgrade.type === 'cps') {
-                    cpsBase += upgrade.value;
-                }
-
                 messageBox.textContent = `Purchased ${upgrade.name}!`;
                 
                 updateStats();
                 updateUI();
                 saveGame();
             } else {
-                messageBox.textContent = `Not enough clicks to buy ${upgrade.name}!`;
+                messageBox.textContent = `Not enough Coins to buy ${upgrade.name}!`;
+                messageBox.style.color = '#ff4444';
+                setTimeout(() => { 
+                    messageBox.style.color = '#e0e0e0';
+                }, 1000);
+            }
+        }
+        
+        /** Handles the purchase of the Evo Core Buff (Shard-based upgrade) */
+        function buyEvoUpgrade1() {
+            if (evoShards >= EVO_UPGRADE_1_COST) {
+                evoShards -= EVO_UPGRADE_1_COST;
+                evoUpgrade1Count++;
+                
+                // Renamed message text
+                messageBox.textContent = `Evo Core Buff upgraded! (x${Math.pow(5, evoUpgrade1Count)} to base power)`;
+                
+                updateStats();
+                updateUI();
+                saveGame();
+            } else {
+                messageBox.textContent = `Not enough Evo Shards!`;
                 messageBox.style.color = '#ff4444';
                 setTimeout(() => { 
                     messageBox.style.color = '#e0e0e0';
@@ -374,17 +484,15 @@
             if (score < ASCENSION_COST) return;
             
             const shardsGained = Math.floor(Math.sqrt(score / ASCENSION_COST));
-            paiserShards += shardsGained;
+            evoShards += shardsGained;
             
             // Reset game state
             score = 0;
-            ppcBase = 1;
-            cpsBase = 0;
             
             // Reset all upgrade counts
             UPGRADE_DEFINITIONS.forEach(u => u.count = 0);
             
-            messageBox.textContent = `ASCENDED! Gained ${shardsGained} Paiser Shards.`;
+            messageBox.textContent = `ASCENDED! Gained ${shardsGained} Evo Shards.`;
 
             // Update stats, UI, and save the game
             updateStats(); 
@@ -398,11 +506,15 @@
                 const currentCost = calculateCost(upgrade.baseCost, upgrade.costMultiplier, upgrade.count);
                 const canAfford = score >= currentCost;
                 
+                // If it's the Hyper-Fusion Core, use the Evo purple border
+                const isGlobalMultiplier = upgrade.id === 'hyper-fusion-core';
+                const itemStyle = isGlobalMultiplier ? 'border-left-color: #9333ea;' : '';
+
                 return `
-                    <div class="upgrade-item">
+                    <div class="upgrade-item" style="${itemStyle}">
                         <div class="upgrade-info">
                             <div class="upgrade-name">${upgrade.name} (x${upgrade.count})</div>
-                            <div class="upgrade-stats">${upgrade.description} | Cost: ${formatNumber(currentCost)} Clicks</div>
+                            <div class="upgrade-stats">${upgrade.description} | Cost: ${formatNumber(currentCost)} Coins</div>
                         </div>
                         <button 
                             id="${upgrade.id}-buy" 
@@ -417,7 +529,7 @@
 
             shopContainer.innerHTML = `<h2>Upgrades Shop</h2>${shopItemsHtml}`;
 
-            // Reattach event listeners since we just replaced the HTML
+            // Reattach coin-based upgrade event listeners
             UPGRADE_DEFINITIONS.forEach(upgrade => {
                 const buyButton = document.getElementById(`${upgrade.id}-buy`);
                 if (buyButton) {
@@ -428,13 +540,10 @@
 
         /**
          * Handles the manual click event.
-         * Note: This function is now triggered by 'mousedown' and 'touchstart' for maximum responsiveness.
          */
         function handlePaiserClick(event) {
             if (event) event.preventDefault(); 
             
-            // console.log("Click registered!");
-
             score += ppc;
             
             // Display message until next click/action
@@ -456,9 +565,10 @@
         function saveGame() {
             const gameState = {
                 score: score,
-                ppcBase: ppcBase,
-                cpsBase: cpsBase,
-                paiserShards: paiserShards,
+                // We use the old keys ('ecoShards', 'ecoUpgrade1Count') to ensure save compatibility
+                // with the previous game version, even though the variable names changed internally.
+                ecoShards: evoShards,
+                ecoUpgrade1Count: evoUpgrade1Count, 
                 upgrades: UPGRADE_DEFINITIONS.map(u => ({ id: u.id, count: u.count }))
             };
             try {
@@ -476,11 +586,12 @@
                 if (savedState) {
                     const gameState = JSON.parse(savedState);
                     
-                    // Load primary stats, setting defaults if keys are missing from older saves
+                    // Load primary stats
                     score = parseFloat(gameState.score) || 0; 
-                    ppcBase = parseFloat(gameState.ppcBase) || 1; 
-                    cpsBase = parseFloat(gameState.cpsBase) || 0;
-                    paiserShards = parseInt(gameState.paiserShards) || 0; 
+                    
+                    // Read from old keys and assign to new internal Evo variables
+                    evoShards = parseInt(gameState.ecoShards) || 0; 
+                    evoUpgrade1Count = parseInt(gameState.ecoUpgrade1Count) || 0; 
 
                     // Load upgrade counts back into the definitions
                     if (gameState.upgrades) {
@@ -498,7 +609,7 @@
             } catch (e) {
                 console.error("Could not load game state:", e);
                 // Start fresh if load fails
-                score = 0; ppcBase = 1; cpsBase = 0; paiserShards = 0;
+                score = 0; evoShards = 0; evoUpgrade1Count = 0;
             }
         }
 
@@ -523,13 +634,16 @@
         function initGame() {
             loadGame();
             
-            // ** FIX APPLIED HERE: Ensure stats are fully calculated IMMEDIATELY after load **
+            // Ensure stats are fully calculated IMMEDIATELY after load 
             updateStats();
             
             // Add input listeners
             clickButton.addEventListener('mousedown', handlePaiserClick);
             clickButton.addEventListener('touchstart', handlePaiserClick);
             ascendButton.addEventListener('click', ascend);
+            
+            // Add new shard upgrade listener
+            buyShardUpgradeButton.addEventListener('click', buyEvoUpgrade1);
 
             // Start the passive income and auto-save loop
             setInterval(gameLoop, GAME_INTERVAL_MS); 
