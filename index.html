@@ -4,12 +4,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paiser Clicker – The Cycle Ends</title>
+    <title>Paiser Clicker – The End</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&display=swap');
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-gradient: radial-gradient(circle at 50% 0%, #1a3a2e 0%, #050a08 100%);
+            --glass-bg: rgba(20, 30, 25, 0.6);
+            --glass-border: rgba(52, 211, 153, 0.1);
+            --accent-color: #10b981;
+            --accent-glow: rgba(16, 185, 129, 0.4);
+            --text-main: #e0e0e0;
+            --text-muted: #9ca3af;
+            --score-color: #4ade80;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-font-smoothing: antialiased; }
 
         body {
             display: flex;
@@ -17,233 +28,543 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: radial-gradient(circle at 50% 20%, #1a3a2e 0%, #0a1612 80%);
+            background: var(--bg-gradient);
             background-attachment: fixed;
-            color: #e0e0e0;
+            color: var(--text-main);
             font-family: 'Inter', sans-serif;
             text-align: center;
             padding: 20px;
             user-select: none;
             overflow-x: hidden;
-            transition: background 1s ease;
+            transition: background 1.5s ease;
         }
 
-        /* UI ELEMENTS */
+        /* --- MAIN CONTAINER --- */
         .game-container {
-            background: rgba(20, 25, 20, 0.65);
-            backdrop-filter: blur(16px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
             padding: 40px;
-            border-radius: 24px;
-            border: 1px solid rgba(52, 211, 153, 0.15);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
-            max-width: 90%;
-            width: 600px;
-            transition: all .5s ease;
+            border-radius: 32px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 
+                0 20px 50px -10px rgba(0, 0, 0, 0.7),
+                0 0 0 1px rgba(255,255,255,0.05) inset;
+            max-width: 600px;
+            width: 95%;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
             position: relative;
             z-index: 10;
+            margin-bottom: 20px;
         }
 
-        h1 { font-size: 2.8rem; font-weight: 900; color: #fff; margin-bottom: 10px; text-shadow: 0 0 10px rgba(52, 211, 153, 0.8); }
+        /* --- HEADERS & SCORE --- */
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            letter-spacing: -0.05em;
+            color: #fff;
+            margin-bottom: 15px;
+            text-shadow: 0 0 30px rgba(52, 211, 153, 0.2);
+        }
 
         #score-display {
-            font-size: 2.5rem;
-            font-weight: 800;
-            margin-bottom: 5px;
-            color: #4ade80;
-            text-shadow: 0 0 15px rgba(74, 222, 128, 0.4);
+            font-family: 'Fira Code', monospace;
+            font-size: 3.2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--score-color);
+            text-shadow: 0 0 20px rgba(74, 222, 128, 0.3);
             word-wrap: break-word;
+            line-height: 1.1;
         }
 
-        #stats-bar { font-size: .95rem; color: #9ca3af; margin-bottom: 20px; }
-        #message-box { min-height: 28px; font-size: 1rem; font-style: italic; color: #a7f3d0; margin-bottom: 20px; }
+        #stats-bar {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
 
-        /* BUTTONS */
+        #message-box {
+            min-height: 24px;
+            font-size: 0.95rem;
+            font-style: italic;
+            color: #a7f3d0;
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
+        /* --- MAIN BUTTON --- */
         #click-button {
-            width: 100%; padding: 20px; font-size: 1.5rem; font-weight: 800;
-            color: #fff; background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            border: none; border-radius: 16px; cursor: pointer;
-            box-shadow: 0 10px 20px rgba(16, 185, 129, .4);
-            transition: .15s; text-transform: uppercase; margin-bottom: 25px;
-            outline: none; -webkit-tap-highlight-color: transparent;
+            width: 100%;
+            padding: 24px;
+            font-size: 1.4rem;
+            font-weight: 900;
+            letter-spacing: 0.1em;
+            color: #fff;
+            background: linear-gradient(135deg, #34d399 0%, #059669 100%);
+            border: none;
+            border-radius: 24px;
+            cursor: pointer;
+            box-shadow: 
+                0 10px 30px -5px var(--accent-glow),
+                0 4px 0px 0px rgba(0,0,0,0.1) inset;
+            transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+            text-transform: uppercase;
+            margin-bottom: 30px;
+            outline: none;
+            position: relative;
+            overflow: hidden;
         }
-        #click-button:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(16, 185, 129, .6); }
-        #click-button:active { transform: translateY(2px); }
+        
+        #click-button::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: rotate(45deg) translateY(-100%);
+            transition: transform 0.5s;
+        }
+        #click-button:hover::after { transform: rotate(45deg) translateY(100%); }
+        #click-button:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -5px var(--accent-glow); }
+        #click-button:active { transform: translateY(2px); box-shadow: 0 5px 15px -5px var(--accent-glow); }
 
-        .section-container { border-top: 1px solid rgba(255, 255, 255, .1); padding-top: 20px; margin-top: 20px; }
-        h2 { font-size: 1.4rem; color: #a7f3d0; margin-bottom: 15px; }
+        /* --- SECTIONS & UPGRADES --- */
+        .section-container {
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 25px;
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        h2 {
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 15px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        h2::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+        }
 
         .upgrade-item {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255, 255, 255, .03); padding: 12px; margin-bottom: 10px;
-            border-radius: 12px; border: 1px solid rgba(255, 255, 255, .05);
+            display: grid;
+            grid-template-columns: 1fr auto;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            margin-bottom: 10px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: all 0.2s ease;
         }
-        .upgrade-name { font-weight: 700; color: #f3f4f6; font-size: 1rem; text-align: left; }
-        .upgrade-stats { font-size: .8rem; color: #9ca3af; margin-top: 4px; text-align: left; }
+        .upgrade-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateX(4px);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .upgrade-name {
+            font-weight: 700;
+            color: #f3f4f6;
+            font-size: 1rem;
+            margin-bottom: 4px;
+        }
+        .upgrade-stats {
+            font-family: 'Fira Code', monospace;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
 
         .upgrade-buy-button {
-            padding: 8px 14px; font-weight: 700; font-size: .85rem; border: none;
-            border-radius: 8px; cursor: pointer; background-color: rgba(255, 255, 255, .1);
-            color: #d1d5db; min-width: 80px;
+            padding: 10px 18px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.08);
+            color: rgba(255,255,255,0.4);
+            transition: all 0.2s;
+            min-width: 90px;
+            text-align: center;
         }
-        .upgrade-buy-button:disabled { opacity: 0.5; cursor: not-allowed; }
         .upgrade-buy-button.can-afford {
-            background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
-            color: #fff; box-shadow: 0 4px 12px rgba(52, 211, 153, .3);
+            background: var(--accent-color);
+            color: #000;
+            box-shadow: 0 4px 15px -3px var(--accent-glow);
+        }
+        .upgrade-buy-button.can-afford:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px -3px var(--accent-glow);
+        }
+        .upgrade-buy-button:disabled { cursor: not-allowed; }
+
+        /* --- SPECIAL ACTIONS (Ascend/Reset) --- */
+        #ascend-button, #true-ascend-button, #endless-ascend-button {
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            border: none;
+            cursor: pointer;
+            color: #fff;
+            font-weight: 800;
+            margin-top: 15px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
 
         #ascend-button {
-            width: 100%; padding: 14px; border-radius: 12px; border: none;
-            cursor: pointer; color: #fff; font-weight: 800; margin-top: 10px; font-size: 1rem;
             background: linear-gradient(135deg, #059669 0%, #047857 100%);
-            box-shadow: 0 8px 15px rgba(5, 150, 105, 0.3);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.3);
         }
-        #ascend-button:disabled { background: #3f3f46; cursor: not-allowed; box-shadow: none; }
+        #ascend-button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(5, 150, 105, 0.5); }
+        #ascend-button:disabled { background: #27272a; color: #52525b; box-shadow: none; }
 
-        #true-ascend-button, #endless-ascend-button {
-            width: 100%; padding: 14px; border-radius: 12px; border: none;
-            cursor: pointer; color: #fff; font-weight: 800; margin-top: 10px; font-size: 1rem;
-        }
         #true-ascend-button {
-            background: linear-gradient(135deg, #7c3aed 0%, #c026d3 100%);
-            animation: pulse 2s infinite;
-        }
-        #endless-ascend-button {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.5);
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            box-shadow: 0 0 25px rgba(139, 92, 246, 0.4);
+            animation: subtle-pulse 3s infinite;
         }
         
         #wipe-save {
-            margin-top: 30px; background: rgba(255,0,0,0.1); color: #ff6b6b;
-            border: 1px solid #ff6b6b; padding: 10px 20px; border-radius: 8px;
-            font-size: 0.8rem; cursor: pointer; transition: all 0.2s;
+            margin-top: 40px;
+            background: transparent;
+            color: #71717a;
+            border: 1px solid #3f3f46;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            opacity: 0.6;
         }
-        #wipe-save:hover { background: rgba(255,0,0,0.2); color: red; border-color: red; }
+        #wipe-save:hover { color: #ef4444; border-color: #ef4444; opacity: 1; }
 
-        /* OVERLAYS & ENDINGS */
+        @keyframes subtle-pulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(139, 92, 246, 0.4); }
+            50% { box-shadow: 0 0 35px rgba(139, 92, 246, 0.6); }
+        }
+
+        /* --- ACHIEVEMENT BUTTON (NORMAL VS SCARY) --- */
+        #ach-open-btn {
+            position: fixed; top: 20px; left: 20px; 
+            /* Default Gold Style */
+            background: rgba(20, 20, 20, 0.8); 
+            border: 1px solid rgba(251, 191, 36, 0.3); 
+            color: #fbbf24; 
+            width: 48px; height: 48px; border-radius: 16px;
+            font-size: 1.2rem; cursor: pointer; z-index: 100;
+            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+        #ach-open-btn:hover { transform: scale(1.1); border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.2); }
+
+        /* Scary Mode Achievement Button Style */
+        .scary-ach-btn {
+            background: rgba(20, 0, 0, 0.8) !important;
+            border-color: rgba(239, 68, 68, 0.5) !important;
+            color: #ef4444 !important;
+            font-weight: 900 !important;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2) !important;
+        }
+        .scary-ach-btn:hover {
+            background: rgba(40, 0, 0, 0.9) !important;
+            box-shadow: 0 0 25px rgba(239, 68, 68, 0.5) !important;
+        }
+
+        /* --- ACHIEVEMENTS MODAL --- */
+        #achievement-container {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; gap: 10px; z-index: 9999; pointer-events: none;
+        }
+        .achievement-toast {
+            background: rgba(10, 10, 10, 0.95); border: 1px solid #fbbf24; color: #fbbf24;
+            padding: 16px 24px; border-radius: 16px; min-width: 320px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
+            animation: slideDown 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), fadeOut 0.5s ease-in 4s forwards;
+            display: flex; align-items: center; gap: 15px; backdrop-filter: blur(10px);
+        }
+        .ach-icon { font-size: 1.8rem; }
+        .ach-title { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.05em; margin-bottom: 2px; }
+        .ach-desc { font-size: 0.85rem; opacity: 0.8; color: #aaa; }
+
+        #ach-modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(12px);
+            z-index: 10001; display: none; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 0.3s;
+        }
+        #ach-modal-overlay.active { display: flex; opacity: 1; }
+
+        #ach-modal {
+            background: #0a0a0a; border: 1px solid #333; padding: 40px;
+            border-radius: 32px; width: 90%; max-width: 550px; max-height: 80vh;
+            overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            display: flex; flex-direction: column; transform: scale(0.95); transition: transform 0.3s;
+        }
+        #ach-modal-overlay.active #ach-modal { transform: scale(1); }
+        #ach-modal h2 { color: #fff; font-size: 2rem; margin-bottom: 25px; text-align: center; }
+        
+        .ach-list-item {
+            display: flex; align-items: center; padding: 16px; margin-bottom: 10px;
+            background: #141414; border-radius: 12px; border: 1px solid #222;
+            opacity: 0.4; transition: all 0.3s;
+        }
+        .ach-list-item.unlocked {
+            opacity: 1; border-color: #fbbf24; 
+            background: linear-gradient(90deg, rgba(251, 191, 36, 0.05), transparent);
+        }
+        .ach-icon-box { font-size: 1.5rem; margin-right: 20px; width: 40px; text-align: center; }
+        .ach-info h3 { font-size: 1rem; color: #fff; margin-bottom: 4px; font-weight: 700; }
+        .ach-info p { font-size: 0.85rem; color: #888; }
+        .ach-list-item.unlocked .ach-info h3 { color: #fbbf24; }
+
+        #ach-close-btn {
+            margin-top: 30px; padding: 15px; background: #222; border: none; color: #fff;
+            border-radius: 12px; cursor: pointer; font-weight: 700; transition: 0.2s;
+        }
+        #ach-close-btn:hover { background: #333; }
+
+        /* --- SAVE STATUS --- */
+        #save-status {
+            position: fixed; bottom: 20px; right: 20px; left: auto; top: auto;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
+            padding: 8px 16px; border-radius: 20px; font-size: 0.75rem;
+            backdrop-filter: blur(10px); color: #aaa;
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+
+        /* ---------------- THEME OVERRIDES ---------------- */
+
+        /* --- RED THEME (True Ascension) --- */
+        .red-theme { 
+            --bg-gradient: radial-gradient(circle at 50% 0%, #450a0a 0%, #1a0505 100%);
+            --glass-bg: rgba(30, 10, 10, 0.7);
+            --glass-border: rgba(248, 113, 113, 0.2);
+            --accent-color: #ef4444;
+            --accent-glow: rgba(239, 68, 68, 0.5);
+            --score-color: #fca5a5;
+            --text-muted: #f87171;
+        }
+        .red-theme h1 { text-shadow: 0 0 30px rgba(239, 68, 68, 0.4); }
+        .red-theme #click-button { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
+        
+        /* --- NULLZONE (Black/Grey) --- */
+        .null-theme {
+            --bg-gradient: #000;
+            --glass-bg: #050505;
+            --glass-border: #333;
+            --accent-color: #333;
+            --accent-glow: rgba(255,255,255,0.1);
+            --score-color: #888;
+            --text-muted: #555;
+            font-family: 'Courier New', monospace;
+        }
+        .null-theme .game-container { border-radius: 0; border: 1px solid #333; }
+        .null-theme h1 { letter-spacing: 0.2em; text-transform: uppercase; }
+        .null-theme #click-button { background: #111; border: 1px solid #333; border-radius: 0; color: #ccc; }
+        .null-theme .upgrade-item { border-radius: 0; }
+        .null-theme .upgrade-buy-button.can-afford { color: #fff; }
+
+        /* --- ROOT (Terminal Green) --- */
+        .root-theme {
+            --bg-gradient: #000;
+            --glass-bg: rgba(0, 20, 0, 0.9);
+            --glass-border: #00ff00;
+            --accent-color: #00ff00;
+            --accent-glow: rgba(0, 255, 0, 0.4);
+            --score-color: #00ff00;
+            --text-main: #00ff00;
+            --text-muted: rgba(0, 255, 0, 0.6);
+            font-family: 'Fira Code', monospace;
+        }
+        .root-theme .game-container { box-shadow: 0 0 30px rgba(0, 255, 0, 0.1); border-width: 2px; }
+        .root-theme #click-button { 
+            background: #000; border: 2px solid #00ff00; color: #00ff00; 
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+        }
+        .root-theme #click-button:hover { background: #00ff00; color: #000; }
+        .root-theme .upgrade-buy-button.can-afford { background: #000; border: 1px solid #0f0; color: #0f0; }
+        .root-theme h1 { text-shadow: 0 0 10px #0f0; }
+
+        /* --- FRAGILE / ENDLESS (White/Glass) --- */
+        .fragile-theme {
+            --bg-gradient: radial-gradient(circle at 50% 0%, #f0f9ff 0%, #e0f2fe 100%);
+            --glass-bg: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(186, 230, 253, 0.8);
+            --accent-color: #0ea5e9;
+            --accent-glow: rgba(14, 165, 233, 0.3);
+            --score-color: #0284c7;
+            --text-main: #334155;
+            --text-muted: #64748b;
+        }
+        .fragile-theme .game-container { box-shadow: 0 20px 60px rgba(186, 230, 253, 0.6); }
+        .fragile-theme h1 { color: #0ea5e9; text-shadow: none; font-weight: 300; }
+        .fragile-theme #click-button { 
+            background: rgba(255,255,255,0.5); border: 2px solid #0ea5e9; color: #0ea5e9; box-shadow: none;
+        }
+        .fragile-theme #click-button:hover { background: #0ea5e9; color: #fff; }
+        .fragile-theme .upgrade-item { background: rgba(255,255,255,0.6); border: 1px solid rgba(14, 165, 233, 0.2); }
+        .fragile-theme .upgrade-name { color: #0369a1; }
+        .fragile-theme .upgrade-buy-button.can-afford { color: #fff; }
+
+        /* --- OVER REACCESSION (Dark Void) --- */
+        .over-theme {
+            --bg-gradient: #000;
+            --glass-bg: #000;
+            --glass-border: #222;
+            --text-main: #fff; /* White Text */
+            --score-color: #fff; /* White Score */
+            overflow: hidden;
+        }
+        .over-theme .game-container { 
+            border: 1px solid #333; box-shadow: none; 
+            animation: jitter 0.05s infinite; /* Whole Container Shakes */
+        }
+        .over-theme h1 { color: #fff; }
+        .over-theme #score-display { font-family: 'Fira Code', monospace; color: #fff; }
+        .over-theme #click-button { background: #000; border: 1px solid #444; color: #fff; box-shadow: none; }
+        
+        /* --- MISC & ANIMATIONS --- */
         #white-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; opacity: 0; pointer-events: none; z-index: 9999;
+            background: white; opacity: 0; pointer-events: none; z-index: 9998;
             transition: opacity 2s ease-in-out;
         }
 
         #ending-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 10000;
+            background: #fff; z-index: 10000;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             opacity: 0; pointer-events: none; transition: opacity 2s ease;
         }
         #ending-overlay.active { opacity: 1; pointer-events: all; }
-        
-        #ending-title {
-            color: #d1d5db; /* Darker White / Light Grey */
-            font-size: 4rem; font-weight: 900; margin-bottom: 40px;
-        }
-        
-        .ending-btn {
-            width: 300px; padding: 20px; margin: 10px; border-radius: 10px;
-            font-size: 1rem; font-weight: 700; cursor: pointer; border: 1px solid #ccc;
-            transition: transform 0.2s;
-        }
-        .ending-btn:hover { transform: scale(1.05); }
 
-        #btn-black-path {
-            background: #000; color: #fff; border-color: #000;
+        /* Horror Effects */
+        .scary-text {
+            position: fixed; color: #fff; font-family: 'Inter', sans-serif; font-weight: 900; font-size: 3rem;
+            pointer-events: none; opacity: 0.8; animation: jitter 0.1s infinite; z-index: 5;
+            text-shadow: none;
         }
-        .ending-desc { font-size: 0.8rem; color: #999; margin-top: 5px; margin-bottom: 20px; width: 300px; }
+        .shaking-upgrade { animation: violent-shake 0.1s infinite; opacity: 0.5; cursor: help !important; }
+        .shaking-upgrade:hover { opacity: 0.8; }
 
-        #btn-white-path {
-            background: #f3f4f6; color: #888; border-color: #e5e7eb;
+        @keyframes jitter {
+            0% { transform: translate(2px, 2px); } 25% { transform: translate(-2px, -2px); }
+            50% { transform: translate(2px, -2px); } 75% { transform: translate(-2px, 2px); }
+            100% { transform: translate(2px, 2px); }
         }
+        @keyframes violent-shake {
+            0% { transform: translate(0,0); } 25% { transform: translate(5px, -5px); }
+            50% { transform: translate(-5px, 5px); } 75% { transform: translate(5px, 5px); }
+            100% { transform: translate(-5px, -5px); }
+        }
+        @keyframes strobe-anim { 0% { background: #000; } 33% { background: #fff; } 66% { background: #500; } 100% { background: #000; } }
+        .strobe-active { animation: strobe-anim 0.08s infinite; }
 
-        #top-counters {
-            position: fixed; top: 20px; right: 20px; text-align: right; z-index: 100;
+        /* End Screens */
+        #accusation-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 20000; display: none;
+            justify-content: center; align-items: center; color: white;
+            font-family: 'Inter', sans-serif; font-size: 1.5rem; cursor: pointer;
         }
+        .shaking-text { animation: jitter 0.1s infinite; }
+
+        #crash-screen {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000088; color: #fff; z-index: 30000; display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            font-family: 'Fira Code', monospace; text-align: left; padding: 50px;
+        }
+        .glitch-line { margin: 5px 0; font-size: 1.2rem; }
+
+        /* Counters */
         .counter-badge {
             background: rgba(0,0,0,0.8); color: #fff; padding: 8px 12px;
             border-radius: 8px; margin-bottom: 5px; font-family: 'Fira Code', monospace;
-            border: 1px solid #333; font-size: 0.9rem;
+            border: 1px solid #333; font-size: 0.8rem;
         }
 
-        #save-status {
-            position: fixed; top: 20px; left: 20px; background: rgba(0,0,0,0.7);
-            padding: 5px 10px; border-radius: 5px; font-size: 0.8rem; opacity: 0;
-            transition: opacity 0.5s; color: #fff;
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0.7); }
-            70% { box-shadow: 0 0 0 10px rgba(124, 58, 237, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(124, 58, 237, 0); }
-        }
-
-        /* THEMES */
-        .red-theme { background: radial-gradient(circle at 50% 20%, #450a0a 0%, #1a0505 80%) !important; }
-        .red-theme .game-container { border-color: rgba(248, 113, 113, 0.3); box-shadow: 0 0 30px rgba(220, 38, 38, 0.2); }
-        .red-theme h1, .red-theme h2, .red-theme #score-display { color: #fca5a5; text-shadow: 0 0 10px #ef4444; }
-        .red-theme #message-box { color: #fca5a5; }
-        .red-theme #click-button { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); box-shadow: 0 10px 20px rgba(239, 68, 68, 0.5); }
-        .red-theme .upgrade-buy-button.can-afford { background: linear-gradient(135deg, #f87171 0%, #dc2626 100%); box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4); }
-
-        .null-theme { background: #000 !important; font-family: 'Courier New', monospace; }
-        .null-theme .game-container { background: #050505; border: 1px solid #333; box-shadow: none; }
-        .null-theme h1 { color: #fff; letter-spacing: 5px; }
-        .null-theme #score-display { color: #888; }
-        .null-theme #click-button { background: #111; color: #fff; border: 1px solid #444; box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1); }
-        .null-theme .upgrade-buy-button.can-afford { background: #333; color: #fff; box-shadow: 0 2px 8px rgba(255, 255, 255, 0.1); }
-
-        .root-theme { background: #000 !important; font-family: 'Fira Code', monospace; }
-        .root-theme .game-container { background: rgba(0, 10, 0, 0.95); border: 1px solid #0f0; box-shadow: 0 0 20px #0f0; }
-        .root-theme h1, .root-theme h2, .root-theme #score-display { color: #0f0; text-shadow: 0 0 5px #0f0; }
-        .root-theme #click-button { background: #000; border: 2px solid #0f0; color: #0f0; box-shadow: 0 0 15px rgba(0, 255, 0, 0.4); }
-        .root-theme .upgrade-buy-button.can-afford { background: #000; border: 1px solid #0f0; color: #0f0; box-shadow: 0 0 8px rgba(0, 255, 0, 0.3); }
-
-        /* FRAGILE / ENDLESS THEME (White/Blue Glass) */
-        .fragile-theme { background: #f8fafc !important; color: #333; }
-        .fragile-theme .game-container {
-            background: rgba(255, 255, 255, 0.9); border: 1px solid #bae6fd;
-            box-shadow: 0 0 50px rgba(186, 230, 253, 1);
-        }
-        .fragile-theme h1, .fragile-theme #score-display { color: #0ea5e9; text-shadow: none; font-weight: 300; }
-        .fragile-theme #click-button {
-            background: transparent; border: 1px solid #0ea5e9; color: #0ea5e9;
-            box-shadow: 0 5px 20px rgba(14, 165, 233, 0.2);
-        }
-        .fragile-theme .upgrade-item { background: #fff; border: 1px solid #e0f2fe; color: #333; }
-        .fragile-theme .upgrade-name { color: #0284c7; }
-        .fragile-theme .upgrade-buy-button.can-afford {
-            background: #0ea5e9; color: #fff; box-shadow: 0 4px 15px rgba(14, 165, 233, 0.3);
-        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
 
     </style>
 </head>
 
 <body>
-    <!-- Visual Effects -->
+    <!-- Layers -->
     <div id="white-overlay"></div>
     <div id="save-status">Game Saved</div>
+    <div id="achievement-container"></div>
     
-    <!-- Ending Screen (Hidden by default) -->
-    <div id="ending-overlay">
-        <h1 id="ending-title">CONGRATULATIONS</h1>
-        
-        <div style="text-align:center;">
-            <button id="btn-black-path" class="ending-btn" onclick="chooseBlackPath()">REBOOT (Hard Mode)</button>
-            <div class="ending-desc">Reset to square one. Higher costs. Lower production. Can you survive?</div>
+    <!-- Achievement Button & Modal -->
+    <button id="ach-open-btn" onclick="toggleAchModal()">🏆</button>
+    <div id="ach-modal-overlay" onclick="toggleAchModal()">
+        <div id="ach-modal" onclick="event.stopPropagation()">
+            <h2>Achievements</h2>
+            <div id="ach-list"></div>
+            <button id="ach-close-btn" onclick="toggleAchModal()">Close</button>
         </div>
+    </div>
 
-        <div style="text-align:center; margin-top:20px;">
-            <button id="btn-white-path" class="ending-btn" onclick="chooseWhitePath()">CONTINUE (Endless)</button>
-            <div class="ending-desc">Keep upgrades. Sharp Glass grants INFINITE clicks. Ascend forever.</div>
+    <!-- Ending 1: Choice -->
+    <div id="ending-overlay">
+        <h1 style="color:#333; font-size:3rem; margin-bottom:40px;">CONGRATULATIONS</h1>
+        <div style="text-align:center;">
+            <button id="btn-black-path" class="upgrade-buy-button" style="background:#000; color:#fff; width:220px; padding:18px; font-size:1rem;" onclick="chooseBlackPath()">REBOOT (Hard Mode)</button>
+            <div style="color:#666; font-size:0.85rem; margin:10px auto; width:250px;">Reset. Harder costs. Lower output.</div>
         </div>
+        <div style="text-align:center; margin-top:40px;">
+            <button id="btn-white-path" class="upgrade-buy-button" style="background:#f0f0f0; color:#333; border:1px solid #ccc; width:220px; padding:18px; font-size:1rem;" onclick="chooseWhitePath()">CONTINUE (Endless)</button>
+            <div style="color:#666; font-size:0.85rem; margin:10px auto; width:250px;">Infinite Clicks. Ascend Forever.</div>
+        </div>
+    </div>
+
+    <!-- Ending 2: The Accusation -->
+    <div id="accusation-screen" onclick="triggerStrobe()">
+        <div class="shaking-text">Your dedication is the reason this happens.</div>
+    </div>
+
+    <!-- Ending 3: The Crash -->
+    <div id="crash-screen">
+        <div style="font-size: 5rem; margin-bottom: 20px;">:(</div>
+        <div class="glitch-line">DATA FILE NOT FOUND</div>
+        <div class="glitch-line">[CRITICAL_ERROR: TRUE_ENDING_NOT_LOADED]</div>
+        <div class="glitch-line">Achievement State: Undefined</div>
+        <div class="glitch-line" style="color:red; margin-top:20px; animation: jitter 0.1s infinite;">Y-O-U-R DEDICATION</div>
     </div>
 
     <!-- Counters -->
-    <div id="top-counters">
+    <div style="position:fixed; top:20px; right:20px; text-align:right; z-index:100;">
         <div id="endless-counter" class="counter-badge" style="display:none; border-color:#0ea5e9; color:#0ea5e9; background:rgba(255,255,255,0.8);">Ascensions: 0</div>
-        <div id="hard-mode-badge" class="counter-badge" style="display:none; border-color:#ff0000; color:#ff0000;">HARD MODE ACTIVE</div>
+        <div id="hard-mode-badge" class="counter-badge" style="display:none; border-color:#ef4444; color:#ef4444;">HARD MODE</div>
     </div>
 
-    <!-- Game Wrapper -->
+    <!-- Game -->
     <div class="game-container">
         <h1>Paiser Clicker</h1>
         <div id="score-display">0 Coins</div>
@@ -251,58 +572,50 @@
         <div id="message-box">Click to start...</div>
         <button id="click-button">CLICK ME</button>
 
-        <!-- FRAGILE VIEW -->
         <div id="fragile-view" style="display:none;">
             <div class="section-container">
                 <h2>Fragile Reality</h2>
-                <div style="color: #0ea5e9; margin-bottom: 15px;">Upgrades Wiped. Reach 10,000 Coins manually.</div>
+                <div style="color:#0ea5e9; margin-bottom:15px; font-size:0.9rem;">Upgrades Wiped. Reach 10,000 Coins manually.</div>
                 <div id="fragile-container"></div>
             </div>
         </div>
 
-        <!-- MAIN VIEW -->
         <div id="main-view">
             <!-- Evolution -->
             <div class="section-container" id="evo-section">
                 <h2>Evolution</h2>
-                <div id="shard-display" style="margin-bottom:10px;font-weight:700;color:#a7f3d0;">Evo Shards: 0</div>
+                <div id="shard-display" style="margin-bottom:10px; font-weight:700; color:var(--accent-color); font-family:'Fira Code', monospace;">Evo Shards: 0</div>
                 <div id="evo-container"></div>
                 
                 <button id="ascend-button" disabled>ASCEND (Reach 10B)</button>
                 
                 <div id="true-ascend-container" style="display:none; margin-top:20px; border-top: 1px dashed #fca5a5; padding-top:15px;">
-                    <div style="color:#fca5a5; font-weight:bold; margin-bottom:5px;">REALITY UNSTABLE</div>
+                    <div style="color:#fca5a5; font-weight:800; margin-bottom:10px; letter-spacing:0.1em;">REALITY UNSTABLE</div>
                     <button id="true-ascend-button">TRUE ASCEND (Cost: Infinity)</button>
                 </div>
             </div>
 
-            <!-- Steampunk -->
             <div class="section-container" id="steampunk-section" style="display:none;">
                 <h2>Steampunk Era</h2>
                 <div id="steampunk-container"></div>
             </div>
 
-            <!-- Nullzone -->
             <div class="section-container" id="nullzone-section" style="display:none;">
                 <h2>The Nullzone</h2>
                 <div id="nullzone-container"></div>
             </div>
 
-            <!-- Root Access -->
             <div class="section-container" id="root-section" style="display:none;">
                 <h2>Root Access</h2>
                 <div id="root-container"></div>
-                <!-- Endless Ascension Button -->
                 <button id="endless-ascend-button" style="display:none;">ASCEND BEYOND</button>
             </div>
 
-            <!-- Dyson -->
             <div class="section-container" id="dyson-section">
                 <h2>Dyson Upgrades</h2>
                 <div id="dyson-container"></div>
             </div>
 
-            <!-- Standard -->
             <div class="section-container">
                 <h2>Standard Upgrades</h2>
                 <div id="shop-container"></div>
@@ -317,7 +630,7 @@
         const GAME_INTERVAL_MS = 50;
         const ASCENSION_COST = 1e10; 
         const SHARD_MULTIPLIER = 0.1;
-        const SAVE_KEY = 'paiser_v6_final_end';
+        const SAVE_KEY = 'paiser_v7_final_reaccess';
 
         /* ---------- Game State ---------- */
         let score = 0, ppc = 1, cps = 0;
@@ -330,17 +643,40 @@
         let rootUnlocked = false;     
         let fragileStage = false;     
         let endlessMode = false;     
-        let hardMode = false; // New flag for black path
+        let hardMode = false; 
+        let overReaccessionActive = false;
+        let endingSequenceActive = false;
         
-        // Counters
+        // Counters & Timers
         let clickCount = 0;
         let evoCoreBuffCount = 0;
         let evoShards = 0;
         let hyperFusionCount = 0;
         let trueAscensions = 0;
         let endlessAscensionCount = 0;
+        let silenceTimer = 0; 
 
-        // Backup for Fragile Stage
+        // Achievements
+        const ACHIEVEMENTS = [
+            { id: 'welcome', name: 'Welcome', desc: 'Begin the Simulation', triggered: false },
+            { id: '1m_coins', name: 'Millionaire', desc: 'Reach 1 Million Coins', triggered: false },
+            { id: '1b_coins', name: 'Billionaire', desc: 'Reach 1 Billion Coins', triggered: false },
+            { id: '1t_coins', name: 'Trillionaire', desc: 'Reach 1 Trillion Coins', triggered: false },
+            { id: '1qa_coins', name: 'Quadrillionaire', desc: 'Reach 1 Quadrillion Coins', triggered: false },
+            { id: 'ascend', name: 'Reborn', desc: 'Ascend for the first time', triggered: false },
+            { id: 'true_ascend', name: 'Red Reality', desc: 'Perform a True Ascension', triggered: false },
+            { id: 'steampunk', name: 'Gears Turning', desc: 'Unlock Steampunk Era', triggered: false },
+            { id: 'infinity', name: 'Limitless', desc: 'Reach Infinity Coins', triggered: false },
+            { id: 'nullzone', name: 'Void Walker', desc: 'Enter the Nullzone', triggered: false },
+            { id: 'nan', name: 'Not a Number', desc: 'Break the Math', triggered: false },
+            { id: 'root', name: 'Superuser', desc: 'Gain Root Access', triggered: false },
+            { id: 'fragile', name: 'System Crash', desc: 'Reboot the System', triggered: false },
+            { id: 'endless', name: 'Eternal', desc: 'Enter Endless Mode', triggered: false },
+            { id: 'hardmode', name: 'Masochist', desc: 'Restart in Hard Mode', triggered: false },
+            { id: 'over', name: 'Over Reaccession', desc: 'You shouldn\'t be here.', triggered: false }
+        ];
+
+        // Backup
         let backupUpgrades = null;
 
         /* ---------- Upgrade Data ---------- */
@@ -397,8 +733,9 @@
             { id: 'sharp-glass', name: 'Sharp Glass', baseCost: 10000, costMultiplier: 1, count: 0, type: 'fragile', value: 0, desc: 'Restore Reality' }
         ];
 
-        /* ---------- Helper Functions ---------- */
+        /* ---------- Core Functions ---------- */
         function formatNumber(n) {
+            if (overReaccessionActive) return "ERROR";
             if (isNaN(n)) return 'NaN';
             if (!isFinite(n)) return 'Infinity';
             if (n < 1000) return Math.floor(n).toString();
@@ -410,16 +747,11 @@
         }
 
         function calculateCost(u) {
-            if (isNaN(u.baseCost)) return NaN; // For System Reboot
+            if (isNaN(u.baseCost)) return NaN; 
             if (u.baseCost === Infinity) return Infinity;
-            
-            // Hard Mode Adjustment: Costs scale slightly faster and base is higher
             let multiplier = u.costMultiplier;
             let base = u.baseCost;
-            if (hardMode) {
-                multiplier += 0.2; 
-                base *= 2; 
-            }
+            if (hardMode) { multiplier += 0.2; base *= 2; }
             return Math.floor(base * Math.pow(multiplier, u.count));
         }
 
@@ -428,28 +760,76 @@
             return msgs[Math.floor(Math.random() * msgs.length)];
         }
 
-        /* ---------- Game Logic ---------- */
+        function checkAchievements() {
+            if (endingSequenceActive) return;
+
+            const award = (id) => {
+                const ach = ACHIEVEMENTS.find(a => a.id === id);
+                if (ach && !ach.triggered) {
+                    ach.triggered = true;
+                    showToast(ach.name, ach.desc);
+                }
+            };
+
+            award('welcome');
+            if (score >= 1e6) award('1m_coins');
+            if (score >= 1e9) award('1b_coins');
+            if (score >= 1e12) award('1t_coins');
+            if (score >= 1e15) award('1qa_coins');
+            if (!isFinite(score) && !isNaN(score)) award('infinity');
+            if (isNaN(score)) award('nan');
+            
+            if (ascended) award('ascend');
+            if (trueAscended) award('true_ascend');
+            if (steampunkUnlocked) award('steampunk');
+            if (nullzoneUnlocked) award('nullzone');
+            if (rootUnlocked) award('root');
+            if (fragileStage) award('fragile');
+            if (endlessMode) award('endless');
+            if (hardMode) award('hardmode');
+            if (overReaccessionActive) award('over');
+        }
+
+        function showToast(name, desc) {
+            const container = document.getElementById('achievement-container');
+            const toast = document.createElement('div');
+            toast.className = 'achievement-toast';
+            toast.innerHTML = `
+                <div class="ach-icon">🏆</div>
+                <div class="ach-text">
+                    <div class="ach-title">${name}</div>
+                    <div class="ach-desc">${desc}</div>
+                </div>
+            `;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 4500);
+        }
+
+        function spawnScaryWord() {
+            if (!overReaccessionActive) return;
+            const words = ["Why are you here?", "Leave", "Run", "Hide", "Stop", "It hurts"];
+            const word = document.createElement('div');
+            word.innerText = words[Math.floor(Math.random() * words.length)];
+            word.className = 'scary-text';
+            word.style.top = Math.random() * 80 + 10 + "%";
+            word.style.left = Math.random() * 80 + 10 + "%";
+            document.body.appendChild(word);
+            setTimeout(() => word.remove(), 2000);
+        }
+
+        /* ---------- Logic ---------- */
         function updateStats() {
             let basePPC = 1, baseCPS = 0, globalMult = 1;
 
-            if (fragileStage) {
-                ppc = 1; cps = 0;
-                return;
-            }
+            if (fragileStage) { ppc = 1; cps = 0; return; }
+            if (hardMode) globalMult *= 0.5;
 
-            // Hard Mode Penalty
-            if (hardMode) {
-                globalMult *= 0.5; 
-            }
-
-            // Standard & Dyson
             [...STANDARD_UPGRADES, ...DYSON_UPGRADES].forEach(u => {
                 if (u.type === 'ppc') basePPC += u.value * u.count;
                 if (u.type === 'cps') baseCPS += u.value * u.count;
                 if (u.type === 'dyson') globalMult *= Math.pow(u.value, u.count);
             });
 
-            // Steampunk
             if (steampunkUnlocked && !nullzoneUnlocked) { 
                 STEAMPUNK_UPGRADES.forEach(u => {
                     if (u.id === 'sp-overdrive') basePPC *= Math.pow(u.value, u.count);
@@ -457,18 +837,12 @@
                     if (u.id === 'sp-gears') globalMult *= Math.pow(u.value, u.count);
                     if (u.id === 'sp-limiter') {
                          let limitVal = 1;
-                         for(let i=0; i<u.count; i++) {
-                            limitVal = (limitVal * 24) + 1; 
-                         }
-                         if (u.count > 0) {
-                            basePPC += limitVal;
-                            baseCPS += limitVal;
-                         }
+                         for(let i=0; i<u.count; i++) limitVal = (limitVal * 24) + 1; 
+                         if (u.count > 0) { basePPC += limitVal; baseCPS += limitVal; }
                     }
                 });
             }
 
-            // Nullzone
             if (nullzoneUnlocked) {
                 NULLZONE_UPGRADES.forEach(u => {
                     if (u.id === 'null-pointer') basePPC *= Math.pow(u.value, u.count);
@@ -476,7 +850,6 @@
                 });
             }
 
-            // Root
             if (rootUnlocked) {
                 ROOT_UPGRADES.forEach(u => {
                     if (u.id === 'sudo-overclock') globalMult *= Math.pow(u.value, u.count);
@@ -484,121 +857,185 @@
                 });
             }
 
-            // Evo Buff
             let evoBuffMult = 1 + (evoCoreBuffCount * (trueAscended ? 1.5 : 5));
             basePPC *= evoBuffMult;
 
-            // Hyper-Fusion
-            if (!trueAscended) {
-                globalMult *= Math.pow(2, hyperFusionCount);
-            }
-
-            // Shard Bonus
-            const shardBonus = 1 + (evoShards * SHARD_MULTIPLIER);
-            basePPC *= shardBonus;
-            baseCPS *= shardBonus;
+            if (!trueAscended) globalMult *= Math.pow(2, hyperFusionCount);
+            basePPC *= (1 + (evoShards * SHARD_MULTIPLIER));
+            baseCPS *= (1 + (evoShards * SHARD_MULTIPLIER));
             
-            // Endless Bonus
-            if (endlessAscensionCount > 0) {
-                globalMult *= Math.pow(10, endlessAscensionCount);
-            }
+            if (endlessAscensionCount > 0) globalMult *= Math.pow(10, endlessAscensionCount);
 
             ppc = basePPC * globalMult;
             cps = baseCPS * globalMult;
         }
 
         function gameLoop() {
-            if (!fragileStage) {
+            if (endingSequenceActive) return;
+
+            // Silence Timer for Over Reaccession
+            if (overReaccessionActive) {
+                silenceTimer += GAME_INTERVAL_MS;
+                if (Math.random() < 0.1) spawnScaryWord();
+                
+                if (silenceTimer >= 30000) { // 30 seconds
+                    triggerAccusation();
+                }
+            }
+
+            if (!fragileStage && !overReaccessionActive) {
                 if (isFinite(score)) {
                     score += cps * (GAME_INTERVAL_MS / 1000);
                     if (!isFinite(score) && !isNaN(score)) score = Infinity; 
                 }
             }
+            
             renderAll();
             updateUI();
             checkUnlocks();
+            checkAchievements();
+            checkOverReaccessionTrigger();
         }
 
         function checkUnlocks() {
-            if (!steampunkUnlocked) {
-                const all100 = STANDARD_UPGRADES.every(u => u.count >= 100);
-                if (all100) {
-                    steampunkUnlocked = true;
-                    document.getElementById('message-box').innerText = "Steampunk Era Unlocked!";
+            if (!steampunkUnlocked && STANDARD_UPGRADES.every(u => u.count >= 100)) {
+                steampunkUnlocked = true;
+                document.getElementById('message-box').innerText = "Steampunk Era Unlocked!";
+            }
+            if (!rootUnlocked && nullzoneUnlocked && isNaN(score)) {
+                rootUnlocked = true;
+                document.getElementById('message-box').innerText = "ROOT ACCESS GRANTED.";
+            }
+        }
+
+        function checkOverReaccessionTrigger() {
+            if (!overReaccessionActive && hardMode && endlessAscensionCount >= 1000000) {
+                const allMaxed = STANDARD_UPGRADES.every(u => u.count >= 100);
+                if (allMaxed) {
+                    enterOverReaccession();
                 }
             }
-            if (!rootUnlocked && nullzoneUnlocked) {
-                if (isNaN(score)) {
-                    rootUnlocked = true;
-                    document.getElementById('message-box').innerText = "ROOT ACCESS GRANTED.";
-                }
-            }
+        }
+
+        function enterOverReaccession() {
+            overReaccessionActive = true;
+            document.body.className = '';
+            document.body.classList.add('over-theme');
+            document.getElementById('message-box').innerText = "What are you looking for?";
+            silenceTimer = 0;
+            spawnScaryWord();
         }
 
         function triggerWhiteout() {
             const overlay = document.getElementById('white-overlay');
             overlay.style.opacity = 1;
-            
             setTimeout(() => {
-                steampunkUnlocked = false;
-                nullzoneUnlocked = true;
-                document.body.className = '';
-                document.body.classList.add('null-theme');
+                steampunkUnlocked = false; nullzoneUnlocked = true;
+                document.body.className = ''; document.body.classList.add('null-theme');
                 document.getElementById('message-box').innerText = "Reality Collapsed. Welcome to the Nullzone.";
-                
-                setTimeout(() => {
-                    overlay.style.opacity = 0;
-                }, 1000);
+                setTimeout(() => overlay.style.opacity = 0, 1000);
             }, 2000);
         }
 
-        /* ---------- UI UPDATES ---------- */
+        /* --- ENDING SEQUENCE --- */
+        function triggerAccusation() {
+            endingSequenceActive = true;
+            document.body.innerHTML = ''; 
+            const screen = document.createElement('div');
+            screen.id = 'accusation-screen';
+            screen.style.display = 'flex';
+            screen.innerHTML = '<div class="shaking-text">Your dedication is the reason this happens.</div>';
+            screen.onclick = triggerStrobe;
+            document.body.appendChild(screen);
+        }
+
+        function triggerStrobe() {
+            const screen = document.getElementById('accusation-screen');
+            screen.innerText = "";
+            document.body.classList.add('strobe-active');
+            setTimeout(() => {
+                document.body.classList.remove('strobe-active');
+                triggerCrash();
+            }, 3000);
+        }
+
+        function triggerCrash() {
+            document.title = "(Corrupted)";
+            document.body.innerHTML = `
+                <div id="crash-screen" style="display:flex;">
+                    <div style="font-size: 5rem; margin-bottom: 20px;">:(</div>
+                    <div class="glitch-line">DATA FILE NOT FOUND</div>
+                    <div class="glitch-line">[CRITICAL_ERROR: TRUE_ENDING_NOT_LOADED]</div>
+                    <div class="glitch-line">Achievement State: Undefined</div>
+                    <div class="glitch-line" style="color:red; margin-top:20px; animation: jitter 0.1s infinite;">Y-O-U-R DEDICATION</div>
+                </div>
+            `;
+        }
+
+        /* --- ACHIEVEMENT MODAL LOGIC --- */
+        function toggleAchModal() {
+            if (endingSequenceActive) return;
+            const modal = document.getElementById('ach-modal-overlay');
+            const list = document.getElementById('ach-list');
+            
+            if (modal.classList.contains('active')) {
+                modal.classList.remove('active');
+            } else {
+                list.innerHTML = '';
+                ACHIEVEMENTS.forEach(ach => {
+                    const item = document.createElement('div');
+                    item.className = `ach-list-item ${ach.triggered ? 'unlocked' : ''}`;
+                    item.innerHTML = `
+                        <div class="ach-icon-box">${ach.triggered ? '🏆' : '🔒'}</div>
+                        <div class="ach-info">
+                            <h3>${ach.name}</h3>
+                            <p>${ach.desc}</p>
+                        </div>
+                    `;
+                    list.appendChild(item);
+                });
+                modal.classList.add('active');
+                
+                // In Over Reaccession, resets silence
+                if (overReaccessionActive) silenceTimer = 0; 
+            }
+        }
+
+        /* ---------- UI & Rendering ---------- */
         function updateUI() {
             const scoreEl = document.getElementById('score-display');
             scoreEl.innerText = formatNumber(score) + ' Coins';
-            
             document.getElementById('stats-bar').innerText = `PPC: ${formatNumber(ppc)} | CPS: ${formatNumber(cps)}`;
             document.getElementById('shard-display').innerText = `Evo Shards: ${evoShards} (+${(evoShards * SHARD_MULTIPLIER * 100).toFixed(0)}% Bonus)`;
 
-            // Counters
             if (endlessMode) {
                 const ec = document.getElementById('endless-counter');
                 ec.style.display = 'block';
                 ec.innerText = `Ascensions: ${endlessAscensionCount}`;
             }
             
+            const hardBadge = document.getElementById('hard-mode-badge');
             if (hardMode) {
-                document.getElementById('hard-mode-badge').style.display = 'block';
+                hardBadge.style.display = 'block';
+                if (overReaccessionActive) {
+                    hardBadge.innerText = "ERROR";
+                    hardBadge.style.color = "white";
+                    hardBadge.style.borderColor = "white";
+                } else {
+                    hardBadge.innerText = "HARD MODE";
+                    hardBadge.style.color = "#ef4444";
+                    hardBadge.style.borderColor = "#ef4444";
+                }
             }
 
-            // Ascend Buttons Logic
-            const btnAscend = document.getElementById('ascend-button');
-            const btnTrue = document.getElementById('true-ascend-container');
-            const btnEndless = document.getElementById('endless-ascend-button');
-
-            // In endless mode, regular ascend buttons are hidden
-            if (endlessMode) {
-                btnAscend.style.display = 'none';
-                btnTrue.style.display = 'none';
-                btnEndless.style.display = 'block';
+            // Achievement Button Logic
+            const achBtn = document.getElementById('ach-open-btn');
+            if (overReaccessionActive) {
+                achBtn.innerText = "?";
+                achBtn.classList.add('scary-ach-btn');
             } else {
-                btnEndless.style.display = 'none';
-                if (isFinite(score)) {
-                    const canAscend = score >= ASCENSION_COST;
-                    btnAscend.disabled = !canAscend;
-                    btnAscend.innerText = canAscend ? 
-                        `ASCEND (+${Math.floor(Math.sqrt(score / ASCENSION_COST))} Shards)` : 
-                        `ASCEND (Reach ${formatNumber(ASCENSION_COST)})`;
-                    btnAscend.style.display = 'block';
-                } else {
-                    btnAscend.style.display = 'none';
-                }
-
-                if (!isFinite(score) && !isNaN(score) && trueAscensions < 1) {
-                    btnTrue.style.display = 'block';
-                } else {
-                    btnTrue.style.display = 'none';
-                }
+                achBtn.innerText = "🏆";
+                achBtn.classList.remove('scary-ach-btn');
             }
 
             // Sections
@@ -606,7 +1043,7 @@
             document.getElementById('nullzone-section').style.display = nullzoneUnlocked ? 'block' : 'none';
             document.getElementById('root-section').style.display = rootUnlocked ? 'block' : 'none';
             
-            // Views
+            // Fragile/Main View
             if (fragileStage) {
                 document.getElementById('main-view').style.display = 'none';
                 document.getElementById('fragile-view').style.display = 'block';
@@ -616,16 +1053,41 @@
                 document.getElementById('fragile-view').style.display = 'none';
             }
 
-            // THEME LOGIC - ENDLESS STAYS FRAGILE
-            document.body.className = ''; 
-            if (endlessMode) document.body.classList.add('fragile-theme');
-            else if (fragileStage) document.body.classList.add('fragile-theme');
-            else if (rootUnlocked) document.body.classList.add('root-theme');
-            else if (nullzoneUnlocked) document.body.classList.add('null-theme');
-            else if (trueAscended) document.body.classList.add('red-theme');
+            // Button Vis
+            if (!overReaccessionActive) {
+                if (endlessMode) {
+                    document.getElementById('ascend-button').style.display = 'none';
+                    document.getElementById('true-ascend-container').style.display = 'none';
+                    document.getElementById('endless-ascend-button').style.display = 'block';
+                } else {
+                    const btnAscend = document.getElementById('ascend-button');
+                    const btnTrue = document.getElementById('true-ascend-container');
+                    document.getElementById('endless-ascend-button').style.display = 'none';
+                    
+                    if (isFinite(score)) {
+                        btnAscend.style.display = 'block';
+                        btnAscend.disabled = score < ASCENSION_COST;
+                        btnAscend.innerText = score >= ASCENSION_COST ? 
+                            `ASCEND (+${Math.floor(Math.sqrt(score / ASCENSION_COST))} Shards)` : 
+                            `ASCEND (Reach ${formatNumber(ASCENSION_COST)})`;
+                    } else {
+                        btnAscend.style.display = 'none';
+                    }
+                    btnTrue.style.display = (!isFinite(score) && !isNaN(score) && trueAscensions < 1) ? 'block' : 'none';
+                }
+            }
+
+            // Themes
+            if (!overReaccessionActive) {
+                document.body.className = ''; 
+                if (endlessMode) document.body.classList.add('fragile-theme');
+                else if (fragileStage) document.body.classList.add('fragile-theme');
+                else if (rootUnlocked) document.body.classList.add('root-theme');
+                else if (nullzoneUnlocked) document.body.classList.add('null-theme');
+                else if (trueAscended) document.body.classList.add('red-theme');
+            }
         }
 
-        /* ---------- Rendering ---------- */
         function renderUpgrade(upgrade, containerId) {
             const container = document.getElementById(containerId);
             let item = document.getElementById(`item-${upgrade.id}`);
@@ -645,100 +1107,82 @@
                 document.getElementById(`buy-${upgrade.id}`).onclick = () => buyUpgrade(upgrade.id);
             }
 
+            // Over Reaccession Effect
+            if (overReaccessionActive) {
+                item.classList.add('shaking-upgrade');
+                item.querySelector('.upgrade-name').innerText = "???";
+                item.querySelector('.upgrade-stats').innerText = "???";
+                return;
+            }
+
             document.getElementById(`count-${upgrade.id}`).innerText = upgrade.count;
             const btn = document.getElementById(`buy-${upgrade.id}`);
             
             if (upgrade.id === 'system-reboot') {
-                if (isNaN(score)) {
-                    btn.innerText = "SYSTEM REBOOT";
-                    btn.disabled = false;
-                    btn.classList.add('can-afford');
-                } else {
-                    btn.innerText = "Req: NaN Coins";
-                    btn.disabled = true;
-                    btn.classList.remove('can-afford');
-                }
+                btn.innerText = isNaN(score) ? "SYSTEM REBOOT" : "Req: NaN Coins";
+                btn.disabled = !isNaN(score);
+                if (isNaN(score)) btn.classList.add('can-afford'); else btn.classList.remove('can-afford');
                 return;
             }
 
             const cost = calculateCost(upgrade);
-
             if (cost === Infinity) {
-                btn.innerText = "Maxed / Inf";
-                btn.disabled = true;
-                btn.classList.remove('can-afford');
+                btn.innerText = "Maxed / Inf"; btn.disabled = true; btn.classList.remove('can-afford');
             } else {
                 btn.innerText = `Buy (${formatNumber(cost)})`;
                 const canAfford = score >= cost;
                 btn.disabled = !canAfford;
-                if (canAfford) btn.classList.add('can-afford');
-                else btn.classList.remove('can-afford');
+                if (canAfford) btn.classList.add('can-afford'); else btn.classList.remove('can-afford');
             }
         }
 
         function renderEvoShop() {
             const container = document.getElementById('evo-container');
             
-            let buffItem = document.getElementById('evo-buff-item');
-            if (!buffItem) {
-                buffItem = document.createElement('div');
-                buffItem.className = 'upgrade-item';
-                buffItem.id = 'evo-buff-item';
-                buffItem.innerHTML = `
-                    <div>
-                        <div class="upgrade-name">Evo Core Buff</div>
-                        <div class="upgrade-stats"><span id="evo-buff-desc"></span> | Lvl: <span id="evo-buff-lvl"></span></div>
-                    </div>
+            if (!document.getElementById('evo-buff-item')) {
+                container.innerHTML += `
+                <div class="upgrade-item" id="evo-buff-item">
+                    <div><div class="upgrade-name">Evo Core Buff</div><div class="upgrade-stats"><span id="buff-desc"></span> | Lvl: <span id="buff-lvl"></span></div></div>
                     <button class="upgrade-buy-button" id="buy-evo-buff" onclick="buyEvoUpgrade('buff')">Buy (10 Shards)</button>
-                `;
-                container.appendChild(buffItem);
+                </div>`;
             }
-            
-            const buffMax = trueAscended ? 1 : Infinity;
-            const canBuyBuff = evoShards >= 10 && evoCoreBuffCount < buffMax;
-            
-            document.getElementById('evo-buff-desc').innerText = `x${trueAscended ? '1.5' : '5'} Multiplier`;
-            document.getElementById('evo-buff-lvl').innerText = `${evoCoreBuffCount} ${trueAscended ? '/ 1' : ''}`;
-            
-            const buffBtn = document.getElementById('buy-evo-buff');
-            buffBtn.disabled = !canBuyBuff;
-            if (canBuyBuff) buffBtn.classList.add('can-afford');
-            else buffBtn.classList.remove('can-afford');
-
-            let fusionItem = document.getElementById('evo-fusion-item');
-            if (!fusionItem) {
-                fusionItem = document.createElement('div');
-                fusionItem.className = 'upgrade-item';
-                fusionItem.id = 'evo-fusion-item';
-                fusionItem.innerHTML = `
-                    <div>
-                        <div class="upgrade-name" id="evo-fusion-name">Hyper-Fusion</div>
-                        <div class="upgrade-stats" id="evo-fusion-stats"></div>
-                    </div>
+            if (!document.getElementById('evo-fusion-item')) {
+                container.innerHTML += `
+                <div class="upgrade-item" id="evo-fusion-item">
+                    <div><div class="upgrade-name" id="fus-name">Hyper-Fusion</div><div class="upgrade-stats" id="fus-stats"></div></div>
                     <button class="upgrade-buy-button" id="buy-evo-fusion" onclick="buyEvoUpgrade('fusion')"></button>
-                `;
-                container.appendChild(fusionItem);
+                </div>`;
             }
 
-            const fusionName = document.getElementById('evo-fusion-name');
-            const fusionStats = document.getElementById('evo-fusion-stats');
-            const fusionBtn = document.getElementById('buy-evo-fusion');
-            const fusionCost = 5e17;
+            // Handle Over Reaccession Glitching for Evo Items
+            if (overReaccessionActive) {
+                const buffItem = document.getElementById('evo-buff-item');
+                const fusItem = document.getElementById('evo-fusion-item');
+                [buffItem, fusItem].forEach(item => {
+                    if(item) {
+                        item.classList.add('shaking-upgrade');
+                        item.querySelector('.upgrade-name').innerText = "???";
+                        item.querySelector('.upgrade-stats').innerText = "???";
+                    }
+                });
+                return; // Stop normal rendering
+            }
 
+            document.getElementById('buff-desc').innerText = `x${trueAscended ? '1.5' : '5'} Multiplier`;
+            document.getElementById('buff-lvl').innerText = `${evoCoreBuffCount} ${trueAscended ? '/ 1' : ''}`;
+            const max = trueAscended ? 1 : Infinity;
+            document.getElementById('buy-evo-buff').disabled = !(evoShards >= 10 && evoCoreBuffCount < max);
+
+            const fusBtn = document.getElementById('buy-evo-fusion');
             if (trueAscended) {
-                fusionName.style.color = '#777';
-                fusionStats.innerText = "LOCKED IN TRUE ASCENSION";
-                fusionBtn.innerText = "LOCKED";
-                fusionBtn.disabled = true;
-                fusionBtn.classList.remove('can-afford');
+                document.getElementById('fus-name').style.color = '#777';
+                document.getElementById('fus-stats').innerText = "LOCKED";
+                fusBtn.innerText = "LOCKED"; fusBtn.disabled = true;
             } else {
-                fusionName.style.color = '#f3f4f6';
-                fusionStats.innerText = `x2 Global | Lvl: ${hyperFusionCount}`;
-                fusionBtn.innerText = "Buy (500Qa Coins)";
-                const canBuyFusion = score >= fusionCost;
-                fusionBtn.disabled = !canBuyFusion;
-                if (canBuyFusion) fusionBtn.classList.add('can-afford');
-                else fusionBtn.classList.remove('can-afford');
+                document.getElementById('fus-name').style.color = '#fff';
+                document.getElementById('fus-stats').innerText = `x2 Global | Lvl: ${hyperFusionCount}`;
+                fusBtn.innerText = "Buy (500Qa Coins)";
+                fusBtn.disabled = score < 5e17;
             }
         }
 
@@ -753,8 +1197,14 @@
             if (fragileStage) FRAGILE_UPGRADE.forEach(u => renderUpgrade(u, 'fragile-container'));
         }
 
-        /* ---------- Interactions & Endings ---------- */
+        /* ---------- Input Handling ---------- */
         function buyUpgrade(id) {
+            if (overReaccessionActive) {
+                spawnScaryWord();
+                silenceTimer = 0; 
+                return;
+            }
+
             const all = [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES, ...FRAGILE_UPGRADE];
             const u = all.find(x => x.id === id);
             if (!u) return;
@@ -762,152 +1212,67 @@
             if (u.id === 'sp-limiter') {
                 const cost = calculateCost(u);
                 if (score >= cost) {
-                    score -= cost;
-                    u.count++;
-                    let limitVal = 1;
-                    for(let i=0; i<u.count; i++) limitVal = (limitVal * 24) + 1;
+                    score -= cost; u.count++;
+                    let limitVal = 1; for(let i=0; i<u.count; i++) limitVal = (limitVal * 24) + 1;
                     if (!isFinite(limitVal)) triggerWhiteout();
-                    updateStats(); renderAll();
                 }
                 return;
             }
-
             if (u.id === 'undefined-variable') {
                 const cost = calculateCost(u);
-                if (score >= cost || isFinite(score)) {
-                    score = NaN;
-                    u.count++;
-                    updateStats(); renderAll();
-                }
+                if (score >= cost || isFinite(score)) { score = NaN; u.count++; }
                 return;
             }
-
             if (u.id === 'system-reboot') {
                 if (isNaN(score)) {
-                    // Backup
                     backupUpgrades = {};
                     [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES].forEach(up => {
-                        backupUpgrades[up.id] = up.count;
-                        up.count = 0;
+                        backupUpgrades[up.id] = up.count; up.count = 0;
                     });
-                    
-                    fragileStage = true;
-                    clickCount = 0;
-                    score = 0; ppc = 1; cps = 0;
-                    document.getElementById('message-box').innerText = "SYSTEM REBOOTED. REALITY FRAGILE.";
-                    updateStats(); renderAll();
+                    fragileStage = true; clickCount = 0; score = 0; ppc = 1; cps = 0;
+                    document.getElementById('message-box').innerText = "SYSTEM REBOOTED.";
                 }
                 return;
             }
-            
-            // 4. SHARP GLASS TRIGGER (SHOWS ENDING SCREEN)
             if (u.id === 'sharp-glass') {
-                const cost = 10000;
-                if (score >= cost) {
-                    showEndingScreen();
-                }
+                if (score >= 10000) showEndingScreen();
                 return;
             }
 
             const cost = calculateCost(u);
-            if (score >= cost && isFinite(cost)) {
-                score -= cost;
-                u.count++;
-                updateStats();
-                renderAll();
-            }
+            if (score >= cost && isFinite(cost)) { score -= cost; u.count++; }
+            updateStats(); renderAll();
         }
 
         window.buyEvoUpgrade = function (type) {
             if (type === 'buff') {
                 const max = trueAscended ? 1 : Infinity;
-                if (evoShards >= 10 && evoCoreBuffCount < max) {
-                    evoShards -= 10;
-                    evoCoreBuffCount++;
-                    updateStats();
-                }
-            } else if (type === 'fusion') {
-                if (trueAscended) return; 
-                const cost = 5e17;
-                if (score >= cost) {
-                    score -= cost;
-                    hyperFusionCount++;
-                    updateStats();
-                }
+                if (evoShards >= 10 && evoCoreBuffCount < max) { evoShards -= 10; evoCoreBuffCount++; }
+            } else if (type === 'fusion' && !trueAscended) {
+                if (score >= 5e17) { score -= 5e17; hyperFusionCount++; }
             }
-            renderEvoShop(); 
-            updateStats();
+            renderEvoShop(); updateStats();
         }
 
-        /* ENDING LOGIC */
-        function showEndingScreen() {
-            const overlay = document.getElementById('ending-overlay');
-            overlay.classList.add('active');
-        }
-
-        window.chooseBlackPath = function() {
-            const btn = document.getElementById('btn-black-path');
-            
-            if (hardMode) {
-                // Trap: If already hard mode, deny retry and force white
-                btn.innerText = "NOT THIS TIME";
-                btn.style.color = "red";
-                btn.style.borderColor = "red";
-                
-                setTimeout(() => {
-                    const overlay = document.getElementById('ending-overlay');
-                    overlay.style.backgroundColor = "white"; // flash white
-                    overlay.innerHTML = ""; // clear content
-                    setTimeout(() => {
-                        chooseWhitePath(); // Force Endless
-                    }, 1000);
-                }, 1000);
-            } else {
-                // Activate Hard Mode (Reset everything)
-                if(confirm("This will wipe your save and increase difficulty. Proceed?")) {
-                    localStorage.removeItem(SAVE_KEY);
-                    localStorage.setItem(SAVE_KEY + "_hard", "true"); // Temp flag
-                    location.reload();
-                }
-            }
-        }
-
-        window.chooseWhitePath = function() {
-            const overlay = document.getElementById('ending-overlay');
-            overlay.classList.remove('active');
-            
-            // Restore from Backup
-            if (backupUpgrades) {
-                [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES].forEach(up => {
-                    if (backupUpgrades[up.id] !== undefined) up.count = backupUpgrades[up.id];
-                });
-            }
-            
-            fragileStage = false;
-            endlessMode = true;
-            score = Infinity; // Infinite clicks immediately
-            
-            document.getElementById('message-box').innerText = "Infinite Clicks Acquired.";
-            updateStats(); renderAll(); updateUI();
-            saveGame();
-        }
-
-        /* EVENTS */
         document.getElementById('click-button').addEventListener('mousedown', e => {
             e.preventDefault();
+            silenceTimer = 0; 
+            
+            if (overReaccessionActive) {
+                score *= 0.9; 
+                spawnScaryWord();
+                return;
+            }
+
             if (fragileStage) {
-                clickCount++;
-                score += 1; 
+                clickCount++; score += 1;
                 document.getElementById('message-box').innerText = `Fragile Clicks: ${score.toFixed(0)} / 10,000`;
             } else if (endlessMode) {
-                // Sharp Glass Effect: Infinite Clicks
                 score = Infinity;
                 document.getElementById('message-box').innerText = "INFINITE POWER";
             } else {
-                if (isFinite(score)) {
-                    score += ppc;
-                    if (!isFinite(score) && !isNaN(score)) score = Infinity;
-                }
+                if (isFinite(score)) { score += ppc; if (!isFinite(score) && !isNaN(score)) score = Infinity; }
+                
                 document.getElementById('message-box').innerText = getRandomMessage();
                 
                 const btn = document.getElementById('click-button');
@@ -917,64 +1282,76 @@
             updateUI();
         });
 
+        document.addEventListener('click', () => { silenceTimer = 0; });
+
         document.getElementById('ascend-button').addEventListener('click', () => {
             if (score >= ASCENSION_COST && isFinite(score)) {
-                const shards = Math.floor(Math.sqrt(score / ASCENSION_COST));
-                evoShards += shards;
-                score = 0;
-                ascended = true;
+                evoShards += Math.floor(Math.sqrt(score / ASCENSION_COST));
+                score = 0; ascended = true;
                 [...STANDARD_UPGRADES, ...DYSON_UPGRADES].forEach(u => u.count = 0);
-                
-                document.getElementById('message-box').innerText = `Ascended! +${shards} Shards.`;
                 updateStats(); renderAll(); updateUI();
             }
         });
 
         document.getElementById('true-ascend-button').addEventListener('click', () => {
             if (!isFinite(score) && !isNaN(score) && trueAscensions < 1) {
-                trueAscensions = 1;
-                trueAscended = true;
-                score = 0;
-                
-                ascended = false; 
-                evoShards = 0;
-                evoCoreBuffCount = 0;
-                hyperFusionCount = 0;
-                steampunkUnlocked = false;
-                nullzoneUnlocked = false;
-                rootUnlocked = false;
-                
+                trueAscensions = 1; trueAscended = true; score = 0; ascended = false;
+                evoShards = 0; evoCoreBuffCount = 0; hyperFusionCount = 0;
+                steampunkUnlocked = false; nullzoneUnlocked = false; rootUnlocked = false;
                 [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES].forEach(u => u.count = 0);
-
-                document.getElementById('message-box').innerText = "TRUE ASCENSION. THE WORLD BLEEDS RED.";
                 updateStats(); renderAll(); updateUI();
             }
         });
 
         document.getElementById('endless-ascend-button').addEventListener('click', () => {
             endlessAscensionCount++;
-            // Reset nothing, just counter goes up
             document.getElementById('message-box').innerText = `Ascension #${endlessAscensionCount} Complete.`;
             updateStats(); updateUI();
         });
 
         document.getElementById('wipe-save').addEventListener('click', () => {
-            if(confirm("Are you sure you want to wipe your save and start over?")) {
-                localStorage.removeItem(SAVE_KEY);
-                localStorage.removeItem(SAVE_KEY + "_hard");
-                location.reload();
-            }
+            if(confirm("Wipe save?")) { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(SAVE_KEY + "_hard"); location.reload(); }
         });
 
-        /* ---------- Save/Load System ---------- */
+        /* ---------- Ending Choice ---------- */
+        function showEndingScreen() { document.getElementById('ending-overlay').classList.add('active'); }
+
+        window.chooseBlackPath = function() {
+            const btn = document.getElementById('btn-black-path');
+            if (hardMode) {
+                btn.innerText = "NOT THIS TIME";
+                btn.style.color = "red"; btn.style.borderColor = "red";
+                setTimeout(() => {
+                    document.getElementById('ending-overlay').style.backgroundColor = "white"; 
+                    document.getElementById('ending-overlay').innerHTML = ""; 
+                    setTimeout(chooseWhitePath, 1000);
+                }, 1000);
+            } else {
+                if(confirm("Wipe save and start Hard Mode?")) {
+                    localStorage.removeItem(SAVE_KEY); localStorage.setItem(SAVE_KEY + "_hard", "true"); location.reload();
+                }
+            }
+        }
+
+        window.chooseWhitePath = function() {
+            document.getElementById('ending-overlay').classList.remove('active');
+            if (backupUpgrades) {
+                [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES].forEach(up => {
+                    if (backupUpgrades[up.id] !== undefined) up.count = backupUpgrades[up.id];
+                });
+            }
+            fragileStage = false; endlessMode = true; score = Infinity;
+            updateStats(); renderAll(); updateUI(); saveGame();
+        }
+
+        /* ---------- Save/Load ---------- */
         function saveGame() {
             const data = {
                 score: isNaN(score) ? 'NaN' : (isFinite(score) ? score : 'Infinity'),
-                ppc, cps, ascended, trueAscended, steampunkUnlocked, nullzoneUnlocked, rootUnlocked, fragileStage, endlessMode, hardMode,
-                evoCoreBuffCount, evoShards, hyperFusionCount, trueAscensions, endlessAscensionCount,
-                clickCount,
-                upgrades: {},
-                backupUpgrades
+                ppc, cps, ascended, trueAscended, steampunkUnlocked, nullzoneUnlocked, rootUnlocked, fragileStage, endlessMode, hardMode, overReaccessionActive,
+                evoCoreBuffCount, evoShards, hyperFusionCount, trueAscensions, endlessAscensionCount, clickCount,
+                upgrades: {}, backupUpgrades,
+                achievements: ACHIEVEMENTS.map(a => a.triggered)
             };
             [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES, ...FRAGILE_UPGRADE].forEach(u => {
                 data.upgrades[u.id] = u.count;
@@ -982,58 +1359,40 @@
             localStorage.setItem(SAVE_KEY, JSON.stringify(data));
             
             const s = document.getElementById('save-status');
-            s.style.opacity = 1;
-            setTimeout(() => s.style.opacity = 0, 2000);
+            s.style.opacity = 1; setTimeout(() => s.style.opacity = 0, 2000);
         }
 
         function loadGame() {
-            // Check for Hard Mode Reset Flag
-            if (localStorage.getItem(SAVE_KEY + "_hard") === "true") {
-                hardMode = true;
-                localStorage.removeItem(SAVE_KEY + "_hard"); // Consume flag
-                // Don't load other data, start fresh with hardMode = true
-                return;
-            }
-
+            if (localStorage.getItem(SAVE_KEY + "_hard") === "true") { hardMode = true; localStorage.removeItem(SAVE_KEY + "_hard"); return; }
             const saved = localStorage.getItem(SAVE_KEY);
             if (saved) {
                 try {
                     const data = JSON.parse(saved);
-                    
-                    if (data.score === 'NaN') score = NaN;
-                    else if (data.score === 'Infinity') score = Infinity;
-                    else score = parseFloat(data.score);
+                    score = data.score === 'NaN' ? NaN : (data.score === 'Infinity' ? Infinity : parseFloat(data.score));
                     if (data.score !== 'NaN' && isNaN(score)) score = 0;
                     
-                    if (data.ascended !== undefined) ascended = data.ascended;
-                    if (data.trueAscended !== undefined) trueAscended = data.trueAscended;
-                    if (data.steampunkUnlocked !== undefined) steampunkUnlocked = data.steampunkUnlocked;
-                    if (data.nullzoneUnlocked !== undefined) nullzoneUnlocked = data.nullzoneUnlocked;
-                    if (data.rootUnlocked !== undefined) rootUnlocked = data.rootUnlocked;
-                    if (data.fragileStage !== undefined) fragileStage = data.fragileStage;
-                    if (data.endlessMode !== undefined) endlessMode = data.endlessMode;
-                    if (data.hardMode !== undefined) hardMode = data.hardMode;
-                    
-                    if (data.evoCoreBuffCount !== undefined) evoCoreBuffCount = data.evoCoreBuffCount;
-                    if (data.evoShards !== undefined) evoShards = data.evoShards;
-                    if (data.hyperFusionCount !== undefined) hyperFusionCount = data.hyperFusionCount;
-                    if (data.trueAscensions !== undefined) trueAscensions = data.trueAscensions;
-                    if (data.endlessAscensionCount !== undefined) endlessAscensionCount = data.endlessAscensionCount;
-                    if (data.clickCount !== undefined) clickCount = data.clickCount;
-                    
-                    if (data.backupUpgrades) backupUpgrades = data.backupUpgrades;
+                    ascended = !!data.ascended; trueAscended = !!data.trueAscended; steampunkUnlocked = !!data.steampunkUnlocked;
+                    nullzoneUnlocked = !!data.nullzoneUnlocked; rootUnlocked = !!data.rootUnlocked; fragileStage = !!data.fragileStage;
+                    endlessMode = !!data.endlessMode; hardMode = !!data.hardMode; overReaccessionActive = !!data.overReaccessionActive;
 
-                    const all = [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES, ...FRAGILE_UPGRADE];
-                    if (data.upgrades) {
-                        all.forEach(u => {
-                            if (data.upgrades[u.id] !== undefined) u.count = data.upgrades[u.id];
-                        });
+                    evoCoreBuffCount = data.evoCoreBuffCount || 0; evoShards = data.evoShards || 0;
+                    hyperFusionCount = data.hyperFusionCount || 0; trueAscensions = data.trueAscensions || 0;
+                    endlessAscensionCount = data.endlessAscensionCount || 0; clickCount = data.clickCount || 0;
+                    backupUpgrades = data.backupUpgrades || null;
+
+                    if (data.achievements) {
+                        data.achievements.forEach((trig, i) => { if (ACHIEVEMENTS[i]) ACHIEVEMENTS[i].triggered = trig; });
                     }
+                    if (data.upgrades) {
+                        const all = [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES, ...FRAGILE_UPGRADE];
+                        all.forEach(u => { if (data.upgrades[u.id] !== undefined) u.count = data.upgrades[u.id]; });
+                    }
+                    if (overReaccessionActive) enterOverReaccession();
                 } catch (e) { console.error(e); }
             }
         }
 
-        /* ---------- Initialization ---------- */
+        /* ---------- Init ---------- */
         loadGame();
         updateStats();
         renderAll();
@@ -1041,6 +1400,7 @@
 
         setInterval(gameLoop, GAME_INTERVAL_MS);
         setInterval(saveGame, 5000);
+
     </script>
 </body>
 </html>
