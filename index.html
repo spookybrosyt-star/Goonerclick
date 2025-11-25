@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paiser Clicker – The End</title>
+    <title>Paiser Clicker – Final Balance</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&display=swap');
@@ -265,10 +265,9 @@
             50% { box-shadow: 0 0 35px rgba(139, 92, 246, 0.6); }
         }
 
-        /* --- ACHIEVEMENT BUTTON (NORMAL VS SCARY) --- */
+        /* --- ACHIEVEMENT TOASTS & MODAL --- */
         #ach-open-btn {
             position: fixed; top: 20px; left: 20px; 
-            /* Default Gold Style */
             background: rgba(20, 20, 20, 0.8); 
             border: 1px solid rgba(251, 191, 36, 0.3); 
             color: #fbbf24; 
@@ -292,7 +291,6 @@
             box-shadow: 0 0 25px rgba(239, 68, 68, 0.5) !important;
         }
 
-        /* --- ACHIEVEMENTS MODAL --- */
         #achievement-container {
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             display: flex; flex-direction: column; gap: 10px; z-index: 9999; pointer-events: none;
@@ -679,29 +677,29 @@
         // Backup
         let backupUpgrades = null;
 
-        /* ---------- Upgrade Data ---------- */
+        /* ---------- Upgrade Data (BUFFED & CHEAPER) ---------- */
         const STANDARD_UPGRADES = [
-            { id: 'u-ppc-1', name: 'Enhanced Mouse', baseCost: 15, costMultiplier: 1.5, count: 0, type: 'ppc', value: 1, desc: '+1 PPC' },
-            { id: 'u-ppc-2', name: 'Quantum Clicker', baseCost: 50, costMultiplier: 1.6, count: 0, type: 'ppc', value: 5, desc: '+5 PPC' },
-            { id: 'u-ppc-3', name: 'Neural Processor', baseCost: 300, costMultiplier: 1.7, count: 0, type: 'ppc', value: 20, desc: '+20 PPC' },
-            { id: 'u-ppc-4', name: "Giant's Finger", baseCost: 1500, costMultiplier: 1.8, count: 0, type: 'ppc', value: 100, desc: '+100 PPC' },
-            { id: 'u-ppc-5', name: "Merchant's Pact", baseCost: 10000, costMultiplier: 1.9, count: 0, type: 'ppc', value: 500, desc: '+500 PPC' },
-            { id: 'u-ppc-6', name: 'Cosmic Cursor', baseCost: 75000, costMultiplier: 2.0, count: 0, type: 'ppc', value: 2000, desc: '+2K PPC' },
-            { id: 'u-ppc-7', name: 'Reality Bender', baseCost: 500000, costMultiplier: 2.1, count: 0, type: 'ppc', value: 10000, desc: '+10K PPC' },
-            { id: 'u-ppc-8', name: 'Dimension Shifter', baseCost: 5000000, costMultiplier: 2.2, count: 0, type: 'ppc', value: 50000, desc: '+50K PPC' },
-            { id: 'u-ppc-9', name: 'Void Clicker', baseCost: 50000000, costMultiplier: 2.3, count: 0, type: 'ppc', value: 250000, desc: '+250K PPC' },
-            { id: 'u-ppc-10', name: 'Infinity Touch', baseCost: 750000000, costMultiplier: 2.4, count: 0, type: 'ppc', value: 1500000, desc: '+1.5M PPC' },
+            { id: 'u-ppc-1', name: 'Enhanced Mouse', baseCost: 10, costMultiplier: 1.3, count: 0, type: 'ppc', value: 2, desc: '+2 PPC' },
+            { id: 'u-ppc-2', name: 'Quantum Clicker', baseCost: 40, costMultiplier: 1.4, count: 0, type: 'ppc', value: 8, desc: '+8 PPC' },
+            { id: 'u-ppc-3', name: 'Neural Processor', baseCost: 250, costMultiplier: 1.5, count: 0, type: 'ppc', value: 35, desc: '+35 PPC' },
+            { id: 'u-ppc-4', name: "Giant's Finger", baseCost: 1200, costMultiplier: 1.6, count: 0, type: 'ppc', value: 150, desc: '+150 PPC' },
+            { id: 'u-ppc-5', name: "Merchant's Pact", baseCost: 8000, costMultiplier: 1.7, count: 0, type: 'ppc', value: 800, desc: '+800 PPC' },
+            { id: 'u-ppc-6', name: 'Cosmic Cursor', baseCost: 50000, costMultiplier: 1.8, count: 0, type: 'ppc', value: 3500, desc: '+3.5K PPC' },
+            { id: 'u-ppc-7', name: 'Reality Bender', baseCost: 350000, costMultiplier: 1.9, count: 0, type: 'ppc', value: 18000, desc: '+18K PPC' },
+            { id: 'u-ppc-8', name: 'Dimension Shifter', baseCost: 3000000, costMultiplier: 2.0, count: 0, type: 'ppc', value: 85000, desc: '+85K PPC' },
+            { id: 'u-ppc-9', name: 'Void Clicker', baseCost: 35000000, costMultiplier: 2.1, count: 0, type: 'ppc', value: 400000, desc: '+400K PPC' },
+            { id: 'u-ppc-10', name: 'Infinity Touch', baseCost: 500000000, costMultiplier: 2.2, count: 0, type: 'ppc', value: 2500000, desc: '+2.5M PPC' },
             
-            { id: 'u-cps-1', name: 'Giant Labor', baseCost: 100, costMultiplier: 1.1, count: 0, type: 'cps', value: 1, desc: '+1 CPS' },
-            { id: 'u-cps-2', name: 'Robot Minions', baseCost: 800, costMultiplier: 1.2, count: 0, type: 'cps', value: 5, desc: '+5 CPS' },
-            { id: 'u-cps-3', name: 'AI Farm', baseCost: 5000, costMultiplier: 1.3, count: 0, type: 'cps', value: 30, desc: '+30 CPS' },
-            { id: 'u-cps-4', name: 'Time Loop', baseCost: 30000, costMultiplier: 1.4, count: 0, type: 'cps', value: 150, desc: '+150 CPS' },
-            { id: 'u-cps-5', name: 'Galactic Pipe', baseCost: 200000, costMultiplier: 1.5, count: 0, type: 'cps', value: 800, desc: '+800 CPS' },
-            { id: 'u-cps-6', name: 'Quantum Factory', baseCost: 2000000, costMultiplier: 1.6, count: 0, type: 'cps', value: 5000, desc: '+5K CPS' },
-            { id: 'u-cps-7', name: 'Antimatter Generator', baseCost: 25000000, costMultiplier: 1.7, count: 0, type: 'cps', value: 30000, desc: '+30K CPS' },
-            { id: 'u-cps-8', name: 'Black Hole Engine', baseCost: 300000000, costMultiplier: 1.8, count: 0, type: 'cps', value: 200000, desc: '+200K CPS' },
-            { id: 'u-cps-9', name: 'Universe Simulator', baseCost: 5000000000, costMultiplier: 1.9, count: 0, type: 'cps', value: 1500000, desc: '+1.5M CPS' },
-            { id: 'u-cps-10', name: 'Multiverse Network', baseCost: 100000000000, costMultiplier: 2.0, count: 0, type: 'cps', value: 12000000, desc: '+12M CPS' }
+            { id: 'u-cps-1', name: 'Giant Labor', baseCost: 80, costMultiplier: 1.1, count: 0, type: 'cps', value: 2, desc: '+2 CPS' },
+            { id: 'u-cps-2', name: 'Robot Minions', baseCost: 600, costMultiplier: 1.15, count: 0, type: 'cps', value: 8, desc: '+8 CPS' },
+            { id: 'u-cps-3', name: 'AI Farm', baseCost: 4000, costMultiplier: 1.2, count: 0, type: 'cps', value: 50, desc: '+50 CPS' },
+            { id: 'u-cps-4', name: 'Time Loop', baseCost: 25000, costMultiplier: 1.3, count: 0, type: 'cps', value: 250, desc: '+250 CPS' },
+            { id: 'u-cps-5', name: 'Galactic Pipe', baseCost: 150000, costMultiplier: 1.4, count: 0, type: 'cps', value: 1200, desc: '+1.2K CPS' },
+            { id: 'u-cps-6', name: 'Quantum Factory', baseCost: 1500000, costMultiplier: 1.5, count: 0, type: 'cps', value: 8000, desc: '+8K CPS' },
+            { id: 'u-cps-7', name: 'Antimatter Generator', baseCost: 18000000, costMultiplier: 1.6, count: 0, type: 'cps', value: 50000, desc: '+50K CPS' },
+            { id: 'u-cps-8', name: 'Black Hole Engine', baseCost: 200000000, costMultiplier: 1.7, count: 0, type: 'cps', value: 350000, desc: '+350K CPS' },
+            { id: 'u-cps-9', name: 'Universe Simulator', baseCost: 3500000000, costMultiplier: 1.8, count: 0, type: 'cps', value: 2500000, desc: '+2.5M CPS' },
+            { id: 'u-cps-10', name: 'Multiverse Network', baseCost: 80000000000, costMultiplier: 1.9, count: 0, type: 'cps', value: 20000000, desc: '+20M CPS' }
         ];
 
         const DYSON_UPGRADES = [
