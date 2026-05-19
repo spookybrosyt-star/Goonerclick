@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Paiser Clicker – Final Balance</title>
+    <title>Paiser Clicker – v2</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap');
         @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@500;700&display=swap');
@@ -39,7 +39,6 @@
             transition: background 1.5s ease;
         }
 
-        /* --- MAIN CONTAINER --- */
         .game-container {
             background: var(--glass-bg);
             backdrop-filter: blur(24px);
@@ -58,7 +57,6 @@
             margin-bottom: 20px;
         }
 
-        /* --- HEADERS & SCORE --- */
         h1 {
             font-size: 2.5rem;
             font-weight: 900;
@@ -100,7 +98,6 @@
             opacity: 0.8;
         }
 
-        /* --- MAIN BUTTON --- */
         #click-button {
             width: 100%;
             padding: 24px;
@@ -122,7 +119,6 @@
             position: relative;
             overflow: hidden;
         }
-        
         #click-button::after {
             content: '';
             position: absolute;
@@ -138,7 +134,6 @@
         #click-button:hover { transform: translateY(-3px); box-shadow: 0 20px 40px -5px var(--accent-glow); }
         #click-button:active { transform: translateY(2px); box-shadow: 0 5px 15px -5px var(--accent-glow); }
 
-        /* --- SECTIONS & UPGRADES --- */
         .section-container {
             border-top: 1px solid rgba(255, 255, 255, 0.08);
             padding-top: 25px;
@@ -163,6 +158,13 @@
             height: 1px;
             background: rgba(255,255,255,0.1);
         }
+
+        /* New stage section header colors */
+        #nano-section h2     { color: #fbbf24; }
+        #crystal-section h2  { color: #818cf8; }
+        #plasma-section h2   { color: #fb923c; }
+        #temporal-section h2 { color: #c084fc; }
+        #liminal-section h2  { color: #2dd4bf; }
 
         .upgrade-item {
             display: grid;
@@ -217,7 +219,6 @@
         }
         .upgrade-buy-button:disabled { cursor: not-allowed; }
 
-        /* --- SPECIAL ACTIONS (Ascend/Reset) --- */
         #ascend-button, #true-ascend-button, #endless-ascend-button {
             width: 100%;
             padding: 16px;
@@ -265,7 +266,6 @@
             50% { box-shadow: 0 0 35px rgba(139, 92, 246, 0.6); }
         }
 
-        /* --- ACHIEVEMENT TOASTS & MODAL --- */
         #ach-open-btn {
             position: fixed; top: 20px; left: 20px; 
             background: rgba(20, 20, 20, 0.8); 
@@ -278,7 +278,6 @@
         }
         #ach-open-btn:hover { transform: scale(1.1); border-color: #fbbf24; box-shadow: 0 0 20px rgba(251, 191, 36, 0.2); }
 
-        /* Scary Mode Achievement Button Style */
         .scary-ach-btn {
             background: rgba(20, 0, 0, 0.8) !important;
             border-color: rgba(239, 68, 68, 0.5) !important;
@@ -301,6 +300,14 @@
             box-shadow: 0 15px 40px rgba(0,0,0,0.5);
             animation: slideDown 0.5s cubic-bezier(0.2, 0.8, 0.2, 1), fadeOut 0.5s ease-in 4s forwards;
             display: flex; align-items: center; gap: 15px; backdrop-filter: blur(10px);
+        }
+        @keyframes slideDown {
+            from { transform: translateY(-20px); opacity: 0; }
+            to   { transform: translateY(0);      opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to   { opacity: 0; }
         }
         .ach-icon { font-size: 1.8rem; }
         .ach-title { font-weight: 800; font-size: 0.95rem; letter-spacing: 0.05em; margin-bottom: 2px; }
@@ -343,7 +350,6 @@
         }
         #ach-close-btn:hover { background: #333; }
 
-        /* --- SAVE STATUS --- */
         #save-status {
             position: fixed; bottom: 20px; right: 20px; left: auto; top: auto;
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.1);
@@ -352,9 +358,7 @@
             opacity: 0; transition: opacity 0.5s; pointer-events: none;
         }
 
-        /* ---------------- THEME OVERRIDES ---------------- */
-
-        /* --- RED THEME (True Ascension) --- */
+        /* ---- THEME OVERRIDES ---- */
         .red-theme { 
             --bg-gradient: radial-gradient(circle at 50% 0%, #450a0a 0%, #1a0505 100%);
             --glass-bg: rgba(30, 10, 10, 0.7);
@@ -367,7 +371,6 @@
         .red-theme h1 { text-shadow: 0 0 30px rgba(239, 68, 68, 0.4); }
         .red-theme #click-button { background: linear-gradient(135deg, #ef4444 0%, #b91c1c 100%); }
         
-        /* --- NULLZONE (Black/Grey) --- */
         .null-theme {
             --bg-gradient: #000;
             --glass-bg: #050505;
@@ -384,7 +387,6 @@
         .null-theme .upgrade-item { border-radius: 0; }
         .null-theme .upgrade-buy-button.can-afford { color: #fff; }
 
-        /* --- ROOT (Terminal Green) --- */
         .root-theme {
             --bg-gradient: #000;
             --glass-bg: rgba(0, 20, 0, 0.9);
@@ -405,7 +407,6 @@
         .root-theme .upgrade-buy-button.can-afford { background: #000; border: 1px solid #0f0; color: #0f0; }
         .root-theme h1 { text-shadow: 0 0 10px #0f0; }
 
-        /* --- FRAGILE / ENDLESS (White/Glass) --- */
         .fragile-theme {
             --bg-gradient: radial-gradient(circle at 50% 0%, #f0f9ff 0%, #e0f2fe 100%);
             --glass-bg: rgba(255, 255, 255, 0.7);
@@ -426,24 +427,22 @@
         .fragile-theme .upgrade-name { color: #0369a1; }
         .fragile-theme .upgrade-buy-button.can-afford { color: #fff; }
 
-        /* --- OVER REACCESSION (Dark Void) --- */
         .over-theme {
             --bg-gradient: #000;
             --glass-bg: #000;
             --glass-border: #222;
-            --text-main: #fff; /* White Text */
-            --score-color: #fff; /* White Score */
+            --text-main: #fff;
+            --score-color: #fff;
             overflow: hidden;
         }
         .over-theme .game-container { 
             border: 1px solid #333; box-shadow: none; 
-            animation: jitter 0.05s infinite; /* Whole Container Shakes */
+            animation: jitter 0.05s infinite;
         }
         .over-theme h1 { color: #fff; }
         .over-theme #score-display { font-family: 'Fira Code', monospace; color: #fff; }
         .over-theme #click-button { background: #000; border: 1px solid #444; color: #fff; box-shadow: none; }
-        
-        /* --- MISC & ANIMATIONS --- */
+
         #white-overlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: white; opacity: 0; pointer-events: none; z-index: 9998;
@@ -458,7 +457,6 @@
         }
         #ending-overlay.active { opacity: 1; pointer-events: all; }
 
-        /* Horror Effects */
         .scary-text {
             position: fixed; color: #fff; font-family: 'Inter', sans-serif; font-weight: 900; font-size: 3rem;
             pointer-events: none; opacity: 0.8; animation: jitter 0.1s infinite; z-index: 5;
@@ -480,7 +478,6 @@
         @keyframes strobe-anim { 0% { background: #000; } 33% { background: #fff; } 66% { background: #500; } 100% { background: #000; } }
         .strobe-active { animation: strobe-anim 0.08s infinite; }
 
-        /* End Screens */
         #accusation-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: black; z-index: 20000; display: none;
@@ -497,29 +494,24 @@
         }
         .glitch-line { margin: 5px 0; font-size: 1.2rem; }
 
-        /* Counters */
         .counter-badge {
             background: rgba(0,0,0,0.8); color: #fff; padding: 8px 12px;
             border-radius: 8px; margin-bottom: 5px; font-family: 'Fira Code', monospace;
             border: 1px solid #333; font-size: 0.8rem;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.2); }
-
     </style>
 </head>
 
 <body>
-    <!-- Layers -->
     <div id="white-overlay"></div>
     <div id="save-status">Game Saved</div>
     <div id="achievement-container"></div>
     
-    <!-- Achievement Button & Modal -->
     <button id="ach-open-btn" onclick="toggleAchModal()">🏆</button>
     <div id="ach-modal-overlay" onclick="toggleAchModal()">
         <div id="ach-modal" onclick="event.stopPropagation()">
@@ -542,12 +534,10 @@
         </div>
     </div>
 
-    <!-- Ending 2: The Accusation -->
+    <!-- Ending 2 & 3 (dynamically injected) -->
     <div id="accusation-screen" onclick="triggerStrobe()">
         <div class="shaking-text">Your dedication is the reason this happens.</div>
     </div>
-
-    <!-- Ending 3: The Crash -->
     <div id="crash-screen">
         <div style="font-size: 5rem; margin-bottom: 20px;">:(</div>
         <div class="glitch-line">DATA FILE NOT FOUND</div>
@@ -556,13 +546,11 @@
         <div class="glitch-line" style="color:red; margin-top:20px; animation: jitter 0.1s infinite;">Y-O-U-R DEDICATION</div>
     </div>
 
-    <!-- Counters -->
     <div style="position:fixed; top:20px; right:20px; text-align:right; z-index:100;">
         <div id="endless-counter" class="counter-badge" style="display:none; border-color:#0ea5e9; color:#0ea5e9; background:rgba(255,255,255,0.8);">Ascensions: 0</div>
         <div id="hard-mode-badge" class="counter-badge" style="display:none; border-color:#ef4444; color:#ef4444;">HARD MODE</div>
     </div>
 
-    <!-- Game -->
     <div class="game-container">
         <h1>Paiser Clicker</h1>
         <div id="score-display">0 Coins</div>
@@ -570,6 +558,7 @@
         <div id="message-box">Click to start...</div>
         <button id="click-button">CLICK ME</button>
 
+        <!-- Fragile View -->
         <div id="fragile-view" style="display:none;">
             <div class="section-container">
                 <h2>Fragile Reality</h2>
@@ -578,7 +567,9 @@
             </div>
         </div>
 
+        <!-- Main View -->
         <div id="main-view">
+
             <!-- Evolution -->
             <div class="section-container" id="evo-section">
                 <h2>Evolution</h2>
@@ -593,27 +584,62 @@
                 </div>
             </div>
 
+            <!-- Stage 4: Steampunk Era -->
             <div class="section-container" id="steampunk-section" style="display:none;">
                 <h2>Steampunk Era</h2>
                 <div id="steampunk-container"></div>
             </div>
 
+            <!-- NEW Stage: Temporal Rift (steampunk extension) -->
+            <div class="section-container" id="temporal-section" style="display:none;">
+                <h2>⏳ Temporal Rift</h2>
+                <div id="temporal-container"></div>
+            </div>
+
+            <!-- Stage 5: Nullzone -->
             <div class="section-container" id="nullzone-section" style="display:none;">
                 <h2>The Nullzone</h2>
                 <div id="nullzone-container"></div>
             </div>
 
+            <!-- NEW Stage: Liminal Zone (nullzone extension) -->
+            <div class="section-container" id="liminal-section" style="display:none;">
+                <h2>🌀 Liminal Zone</h2>
+                <div id="liminal-container"></div>
+            </div>
+
+            <!-- Stage 6: Root Access -->
             <div class="section-container" id="root-section" style="display:none;">
                 <h2>Root Access</h2>
                 <div id="root-container"></div>
                 <button id="endless-ascend-button" style="display:none;">ASCEND BEYOND</button>
             </div>
 
+            <!-- NEW Stage: Plasma Age (mid-late game bridge) -->
+            <div class="section-container" id="plasma-section" style="display:none;">
+                <h2>🔥 Plasma Age</h2>
+                <div id="plasma-container"></div>
+            </div>
+
+            <!-- Dyson Upgrades -->
             <div class="section-container" id="dyson-section">
                 <h2>Dyson Upgrades</h2>
                 <div id="dyson-container"></div>
             </div>
 
+            <!-- NEW Stage: Crystal Realm (post-ascension) -->
+            <div class="section-container" id="crystal-section" style="display:none;">
+                <h2>💎 Crystal Realm</h2>
+                <div id="crystal-container"></div>
+            </div>
+
+            <!-- NEW Stage: Nano Age (early game) -->
+            <div class="section-container" id="nano-section" style="display:none;">
+                <h2>⚡ Nano Age</h2>
+                <div id="nano-container"></div>
+            </div>
+
+            <!-- Standard Upgrades -->
             <div class="section-container">
                 <h2>Standard Upgrades</h2>
                 <div id="shop-container"></div>
@@ -624,114 +650,177 @@
     </div>
 
     <script>
-        /* ---------- Constants ---------- */
+        /* =========================================================
+           CONSTANTS
+        ========================================================= */
         const GAME_INTERVAL_MS = 50;
-        const ASCENSION_COST = 1e10; 
+        const ASCENSION_COST = 1e10;
         const SHARD_MULTIPLIER = 0.1;
         const SAVE_KEY = 'paiser_v7_final_reaccess';
 
-        /* ---------- Game State ---------- */
+        /* =========================================================
+           GAME STATE
+        ========================================================= */
         let score = 0, ppc = 1, cps = 0;
-        
-        // Progression Flags
+
+        // Core flags
         let ascended = false;
         let trueAscended = false;
         let steampunkUnlocked = false;
-        let nullzoneUnlocked = false; 
-        let rootUnlocked = false;     
-        let fragileStage = false;     
-        let endlessMode = false;     
-        let hardMode = false; 
+        let nullzoneUnlocked = false;
+        let rootUnlocked = false;
+        let fragileStage = false;
+        let endlessMode = false;
+        let hardMode = false;
         let overReaccessionActive = false;
         let endingSequenceActive = false;
-        
-        // Counters & Timers
+
+        // NEW stage flags
+        let nanoUnlocked = false;
+        let crystalUnlocked = false;
+        let plasmaUnlocked = false;
+        let temporalUnlocked = false;
+        let liminalUnlocked = false;
+
+        // Counters
         let clickCount = 0;
         let evoCoreBuffCount = 0;
         let evoShards = 0;
         let hyperFusionCount = 0;
         let trueAscensions = 0;
         let endlessAscensionCount = 0;
-        let silenceTimer = 0; 
+        let silenceTimer = 0;
 
-        // Achievements
+        /* =========================================================
+           ACHIEVEMENTS
+        ========================================================= */
         const ACHIEVEMENTS = [
-            { id: 'welcome', name: 'Welcome', desc: 'Begin the Simulation', triggered: false },
-            { id: '1m_coins', name: 'Millionaire', desc: 'Reach 1 Million Coins', triggered: false },
-            { id: '1b_coins', name: 'Billionaire', desc: 'Reach 1 Billion Coins', triggered: false },
-            { id: '1t_coins', name: 'Trillionaire', desc: 'Reach 1 Trillion Coins', triggered: false },
-            { id: '1qa_coins', name: 'Quadrillionaire', desc: 'Reach 1 Quadrillion Coins', triggered: false },
-            { id: 'ascend', name: 'Reborn', desc: 'Ascend for the first time', triggered: false },
-            { id: 'true_ascend', name: 'Red Reality', desc: 'Perform a True Ascension', triggered: false },
-            { id: 'steampunk', name: 'Gears Turning', desc: 'Unlock Steampunk Era', triggered: false },
-            { id: 'infinity', name: 'Limitless', desc: 'Reach Infinity Coins', triggered: false },
-            { id: 'nullzone', name: 'Void Walker', desc: 'Enter the Nullzone', triggered: false },
-            { id: 'nan', name: 'Not a Number', desc: 'Break the Math', triggered: false },
-            { id: 'root', name: 'Superuser', desc: 'Gain Root Access', triggered: false },
-            { id: 'fragile', name: 'System Crash', desc: 'Reboot the System', triggered: false },
-            { id: 'endless', name: 'Eternal', desc: 'Enter Endless Mode', triggered: false },
-            { id: 'hardmode', name: 'Masochist', desc: 'Restart in Hard Mode', triggered: false },
-            { id: 'over', name: 'Over Reaccession', desc: 'You shouldn\'t be here.', triggered: false }
+            { id: 'welcome',    name: 'Welcome',         desc: 'Begin the Simulation',           triggered: false },
+            { id: '1m_coins',   name: 'Millionaire',     desc: 'Reach 1 Million Coins',          triggered: false },
+            { id: '1b_coins',   name: 'Billionaire',     desc: 'Reach 1 Billion Coins',          triggered: false },
+            { id: '1t_coins',   name: 'Trillionaire',    desc: 'Reach 1 Trillion Coins',         triggered: false },
+            { id: '1qa_coins',  name: 'Quadrillionaire', desc: 'Reach 1 Quadrillion Coins',      triggered: false },
+            { id: 'ascend',     name: 'Reborn',          desc: 'Ascend for the first time',      triggered: false },
+            { id: 'true_ascend',name: 'Red Reality',     desc: 'Perform a True Ascension',       triggered: false },
+            { id: 'steampunk',  name: 'Gears Turning',   desc: 'Unlock Steampunk Era',           triggered: false },
+            { id: 'infinity',   name: 'Limitless',       desc: 'Reach Infinity Coins',           triggered: false },
+            { id: 'nullzone',   name: 'Void Walker',     desc: 'Enter the Nullzone',             triggered: false },
+            { id: 'nan',        name: 'Not a Number',    desc: 'Break the Math',                 triggered: false },
+            { id: 'root',       name: 'Superuser',       desc: 'Gain Root Access',               triggered: false },
+            { id: 'fragile',    name: 'System Crash',    desc: 'Reboot the System',              triggered: false },
+            { id: 'endless',    name: 'Eternal',         desc: 'Enter Endless Mode',             triggered: false },
+            { id: 'hardmode',   name: 'Masochist',       desc: 'Restart in Hard Mode',           triggered: false },
+            { id: 'over',       name: 'Over Reaccession',desc: 'You shouldn\'t be here.',        triggered: false },
+            // NEW stage achievements
+            { id: 'nano',       name: 'First Light',     desc: 'Unlock the Nano Age',            triggered: false },
+            { id: 'crystal',    name: 'Crystallized',    desc: 'Enter the Crystal Realm',        triggered: false },
+            { id: 'plasma',     name: 'Plasma State',    desc: 'Ignite the Plasma Age',          triggered: false },
+            { id: 'temporal',   name: 'Time Bender',     desc: 'Open the Temporal Rift',         triggered: false },
+            { id: 'liminal',    name: 'Between Worlds',  desc: 'Find the Liminal Zone',          triggered: false }
         ];
 
-        // Backup
         let backupUpgrades = null;
 
-        /* ---------- Upgrade Data (BUFFED & CHEAPER) ---------- */
+        /* =========================================================
+           UPGRADE DATA
+        ========================================================= */
         const STANDARD_UPGRADES = [
-            { id: 'u-ppc-1', name: 'Enhanced Mouse', baseCost: 10, costMultiplier: 1.3, count: 0, type: 'ppc', value: 2, desc: '+2 PPC' },
-            { id: 'u-ppc-2', name: 'Quantum Clicker', baseCost: 40, costMultiplier: 1.4, count: 0, type: 'ppc', value: 8, desc: '+8 PPC' },
-            { id: 'u-ppc-3', name: 'Neural Processor', baseCost: 250, costMultiplier: 1.5, count: 0, type: 'ppc', value: 35, desc: '+35 PPC' },
-            { id: 'u-ppc-4', name: "Giant's Finger", baseCost: 1200, costMultiplier: 1.6, count: 0, type: 'ppc', value: 150, desc: '+150 PPC' },
-            { id: 'u-ppc-5', name: "Merchant's Pact", baseCost: 8000, costMultiplier: 1.7, count: 0, type: 'ppc', value: 800, desc: '+800 PPC' },
-            { id: 'u-ppc-6', name: 'Cosmic Cursor', baseCost: 50000, costMultiplier: 1.8, count: 0, type: 'ppc', value: 3500, desc: '+3.5K PPC' },
-            { id: 'u-ppc-7', name: 'Reality Bender', baseCost: 350000, costMultiplier: 1.9, count: 0, type: 'ppc', value: 18000, desc: '+18K PPC' },
-            { id: 'u-ppc-8', name: 'Dimension Shifter', baseCost: 3000000, costMultiplier: 2.0, count: 0, type: 'ppc', value: 85000, desc: '+85K PPC' },
-            { id: 'u-ppc-9', name: 'Void Clicker', baseCost: 35000000, costMultiplier: 2.1, count: 0, type: 'ppc', value: 400000, desc: '+400K PPC' },
-            { id: 'u-ppc-10', name: 'Infinity Touch', baseCost: 500000000, costMultiplier: 2.2, count: 0, type: 'ppc', value: 2500000, desc: '+2.5M PPC' },
-            
-            { id: 'u-cps-1', name: 'Giant Labor', baseCost: 80, costMultiplier: 1.1, count: 0, type: 'cps', value: 2, desc: '+2 CPS' },
-            { id: 'u-cps-2', name: 'Robot Minions', baseCost: 600, costMultiplier: 1.15, count: 0, type: 'cps', value: 8, desc: '+8 CPS' },
-            { id: 'u-cps-3', name: 'AI Farm', baseCost: 4000, costMultiplier: 1.2, count: 0, type: 'cps', value: 50, desc: '+50 CPS' },
-            { id: 'u-cps-4', name: 'Time Loop', baseCost: 25000, costMultiplier: 1.3, count: 0, type: 'cps', value: 250, desc: '+250 CPS' },
-            { id: 'u-cps-5', name: 'Galactic Pipe', baseCost: 150000, costMultiplier: 1.4, count: 0, type: 'cps', value: 1200, desc: '+1.2K CPS' },
-            { id: 'u-cps-6', name: 'Quantum Factory', baseCost: 1500000, costMultiplier: 1.5, count: 0, type: 'cps', value: 8000, desc: '+8K CPS' },
-            { id: 'u-cps-7', name: 'Antimatter Generator', baseCost: 18000000, costMultiplier: 1.6, count: 0, type: 'cps', value: 50000, desc: '+50K CPS' },
-            { id: 'u-cps-8', name: 'Black Hole Engine', baseCost: 200000000, costMultiplier: 1.7, count: 0, type: 'cps', value: 350000, desc: '+350K CPS' },
-            { id: 'u-cps-9', name: 'Universe Simulator', baseCost: 3500000000, costMultiplier: 1.8, count: 0, type: 'cps', value: 2500000, desc: '+2.5M CPS' },
-            { id: 'u-cps-10', name: 'Multiverse Network', baseCost: 80000000000, costMultiplier: 1.9, count: 0, type: 'cps', value: 20000000, desc: '+20M CPS' }
+            { id: 'u-ppc-1',  name: 'Enhanced Mouse',       baseCost: 10,        costMultiplier: 1.3, count: 0, type: 'ppc', value: 2,       desc: '+2 PPC' },
+            { id: 'u-ppc-2',  name: 'Quantum Clicker',      baseCost: 40,        costMultiplier: 1.4, count: 0, type: 'ppc', value: 8,       desc: '+8 PPC' },
+            { id: 'u-ppc-3',  name: 'Neural Processor',     baseCost: 250,       costMultiplier: 1.5, count: 0, type: 'ppc', value: 35,      desc: '+35 PPC' },
+            { id: 'u-ppc-4',  name: "Giant's Finger",       baseCost: 1200,      costMultiplier: 1.6, count: 0, type: 'ppc', value: 150,     desc: '+150 PPC' },
+            { id: 'u-ppc-5',  name: "Merchant's Pact",      baseCost: 8000,      costMultiplier: 1.7, count: 0, type: 'ppc', value: 800,     desc: '+800 PPC' },
+            { id: 'u-ppc-6',  name: 'Cosmic Cursor',        baseCost: 50000,     costMultiplier: 1.8, count: 0, type: 'ppc', value: 3500,    desc: '+3.5K PPC' },
+            { id: 'u-ppc-7',  name: 'Reality Bender',       baseCost: 350000,    costMultiplier: 1.9, count: 0, type: 'ppc', value: 18000,   desc: '+18K PPC' },
+            { id: 'u-ppc-8',  name: 'Dimension Shifter',    baseCost: 3000000,   costMultiplier: 2.0, count: 0, type: 'ppc', value: 85000,   desc: '+85K PPC' },
+            { id: 'u-ppc-9',  name: 'Void Clicker',         baseCost: 35000000,  costMultiplier: 2.1, count: 0, type: 'ppc', value: 400000,  desc: '+400K PPC' },
+            { id: 'u-ppc-10', name: 'Infinity Touch',       baseCost: 500000000, costMultiplier: 2.2, count: 0, type: 'ppc', value: 2500000, desc: '+2.5M PPC' },
+
+            { id: 'u-cps-1',  name: 'Giant Labor',          baseCost: 80,          costMultiplier: 1.1,  count: 0, type: 'cps', value: 2,        desc: '+2 CPS' },
+            { id: 'u-cps-2',  name: 'Robot Minions',        baseCost: 600,         costMultiplier: 1.15, count: 0, type: 'cps', value: 8,        desc: '+8 CPS' },
+            { id: 'u-cps-3',  name: 'AI Farm',              baseCost: 4000,        costMultiplier: 1.2,  count: 0, type: 'cps', value: 50,       desc: '+50 CPS' },
+            { id: 'u-cps-4',  name: 'Time Loop',            baseCost: 25000,       costMultiplier: 1.3,  count: 0, type: 'cps', value: 250,      desc: '+250 CPS' },
+            { id: 'u-cps-5',  name: 'Galactic Pipe',        baseCost: 150000,      costMultiplier: 1.4,  count: 0, type: 'cps', value: 1200,     desc: '+1.2K CPS' },
+            { id: 'u-cps-6',  name: 'Quantum Factory',      baseCost: 1500000,     costMultiplier: 1.5,  count: 0, type: 'cps', value: 8000,     desc: '+8K CPS' },
+            { id: 'u-cps-7',  name: 'Antimatter Generator', baseCost: 18000000,    costMultiplier: 1.6,  count: 0, type: 'cps', value: 50000,    desc: '+50K CPS' },
+            { id: 'u-cps-8',  name: 'Black Hole Engine',    baseCost: 200000000,   costMultiplier: 1.7,  count: 0, type: 'cps', value: 350000,   desc: '+350K CPS' },
+            { id: 'u-cps-9',  name: 'Universe Simulator',   baseCost: 3500000000,  costMultiplier: 1.8,  count: 0, type: 'cps', value: 2500000,  desc: '+2.5M CPS' },
+            { id: 'u-cps-10', name: 'Multiverse Network',   baseCost: 80000000000, costMultiplier: 1.9,  count: 0, type: 'cps', value: 20000000, desc: '+20M CPS' }
         ];
 
+        // Cheaper Dyson upgrades (10-100x cheaper than original)
         const DYSON_UPGRADES = [
-            { id: 'dyson-sphere', name: 'Dyson Sphere', baseCost: 1e15, costMultiplier: 10, count: 0, type: 'dyson', value: 10, desc: 'x10 Production' },
-            { id: 'dyson-swarm', name: 'Dyson Swarm', baseCost: 1e18, costMultiplier: 100, count: 0, type: 'dyson', value: 25, desc: 'x25 Production' },
-            { id: 'dyson-omega', name: 'Omega Dyson', baseCost: 1e24, costMultiplier: 1000, count: 0, type: 'dyson', value: 100, desc: 'x100 Production' }
+            { id: 'dyson-sphere', name: 'Dyson Sphere', baseCost: 1e14,  costMultiplier: 10,   count: 0, type: 'dyson', value: 10,  desc: 'x10 Production' },
+            { id: 'dyson-swarm',  name: 'Dyson Swarm',  baseCost: 1e16,  costMultiplier: 100,  count: 0, type: 'dyson', value: 25,  desc: 'x25 Production' },
+            { id: 'dyson-omega',  name: 'Omega Dyson',  baseCost: 1e21,  costMultiplier: 1000, count: 0, type: 'dyson', value: 100, desc: 'x100 Production' }
+        ];
+
+        // NEW: Nano Age — unlocks at 50K coins
+        const NANO_UPGRADES = [
+            { id: 'nano-chip',        name: 'Nano Chip',        baseCost: 5000,    costMultiplier: 1.3, count: 0, type: 'ppc',         value: 15,  desc: '+15 PPC' },
+            { id: 'nano-factory',     name: 'Nano Factory',     baseCost: 20000,   costMultiplier: 1.4, count: 0, type: 'cps',         value: 80,  desc: '+80 CPS' },
+            { id: 'nano-catalyst',    name: 'Nano Catalyst',    baseCost: 150000,  costMultiplier: 2.0, count: 0, type: 'global-mult', value: 1.5, desc: 'x1.5 Global' },
+            { id: 'nano-singularity', name: 'Nano Singularity', baseCost: 3000000, costMultiplier: 3.0, count: 0, type: 'global-mult', value: 2.0, desc: 'x2 Global' }
+        ];
+
+        // NEW: Crystal Realm — unlocks after first ascension
+        const CRYSTAL_UPGRADES = [
+            { id: 'crystal-amp',    name: 'Crystal Amplifier', baseCost: 500,    costMultiplier: 1.5, count: 0, type: 'ppc',         value: 500,  desc: '+500 PPC' },
+            { id: 'crystal-lens',   name: 'Crystal Lens',      baseCost: 2000,   costMultiplier: 1.6, count: 0, type: 'cps',         value: 2000, desc: '+2K CPS' },
+            { id: 'crystal-matrix', name: 'Crystal Matrix',    baseCost: 20000,  costMultiplier: 2.0, count: 0, type: 'global-mult', value: 3,    desc: 'x3 Global' },
+            { id: 'crystal-nexus',  name: 'Crystal Nexus',     baseCost: 500000, costMultiplier: 5.0, count: 0, type: 'global-mult', value: 10,   desc: 'x10 Global' }
+        ];
+
+        // NEW: Plasma Age — unlocks at 1T coins
+        const PLASMA_UPGRADES = [
+            { id: 'plasma-core',    name: 'Plasma Core',    baseCost: 1e12, costMultiplier: 5,  count: 0, type: 'ppc',         value: 1e8, desc: '+100M PPC' },
+            { id: 'plasma-reactor', name: 'Plasma Reactor', baseCost: 1e13, costMultiplier: 5,  count: 0, type: 'cps',         value: 5e8, desc: '+500M CPS' },
+            { id: 'plasma-surge',   name: 'Plasma Surge',   baseCost: 1e14, costMultiplier: 10, count: 0, type: 'global-mult', value: 5,   desc: 'x5 Global' }
         ];
 
         const STEAMPUNK_UPGRADES = [
-            { id: 'sp-overdrive', name: 'Overdrive', baseCost: 1e33, costMultiplier: 10, count: 0, type: 'sp', value: 5, desc: 'x5 Click Power' },
-            { id: 'sp-boiler', name: 'Aether Boiler', baseCost: 5e33, costMultiplier: 10, count: 0, type: 'sp', value: 5, desc: 'x5 CPS' },
-            { id: 'sp-gears', name: 'Clockwork Gears', baseCost: 1e34, costMultiplier: 10, count: 0, type: 'sp', value: 2, desc: 'x2 Global' },
-            { id: 'sp-limiter', name: 'The Limiter', baseCost: 1e35, costMultiplier: 10, count: 0, type: 'sp', value: 1, desc: 'Exponential Growth' }
+            { id: 'sp-overdrive', name: 'Overdrive',       baseCost: 1e33, costMultiplier: 10, count: 0, type: 'sp', value: 5,  desc: 'x5 Click Power' },
+            { id: 'sp-boiler',    name: 'Aether Boiler',   baseCost: 5e33, costMultiplier: 10, count: 0, type: 'sp', value: 5,  desc: 'x5 CPS' },
+            { id: 'sp-gears',     name: 'Clockwork Gears', baseCost: 1e34, costMultiplier: 10, count: 0, type: 'sp', value: 2,  desc: 'x2 Global' },
+            { id: 'sp-limiter',   name: 'The Limiter',     baseCost: 1e35, costMultiplier: 10, count: 0, type: 'sp', value: 1,  desc: 'Exponential Growth' }
         ];
 
+        // NEW: Temporal Rift — unlocks when first steampunk upgrade purchased
+        const TEMPORAL_UPGRADES = [
+            { id: 'temporal-echo',     name: 'Temporal Echo',     baseCost: 5e33, costMultiplier: 10, count: 0, type: 'temp', value: 3,  desc: 'x3 Global' },
+            { id: 'temporal-loop',     name: 'Temporal Loop',     baseCost: 5e34, costMultiplier: 10, count: 0, type: 'temp', value: 10, desc: 'x10 CPS' },
+            { id: 'temporal-collapse', name: 'Temporal Collapse', baseCost: 5e35, costMultiplier: 10, count: 0, type: 'temp', value: 50, desc: 'x50 PPC' }
+        ];
+
+        // Cheaper nullzone upgrades
         const NULLZONE_UPGRADES = [
-            { id: 'null-pointer', name: 'Null Pointer', baseCost: 1e30, costMultiplier: 100, count: 0, type: 'null', value: 1e10, desc: 'x1e10 Production' },
-            { id: 'stack-overflow', name: 'Stack Overflow', baseCost: 1e40, costMultiplier: 100, count: 0, type: 'null', value: 1000, desc: '+1000 CPS' },
-            { id: 'undefined-variable', name: 'Undefined Variable', baseCost: 1e50, costMultiplier: 100, count: 0, type: 'null', value: 0, desc: 'Set Coins to NaN' }
+            { id: 'null-pointer',        name: 'Null Pointer',        baseCost: 1e26, costMultiplier: 100, count: 0, type: 'null', value: 1e10, desc: 'x1e10 PPC' },
+            { id: 'stack-overflow',      name: 'Stack Overflow',      baseCost: 1e35, costMultiplier: 100, count: 0, type: 'null', value: 1000, desc: '+1K CPS' },
+            { id: 'undefined-variable',  name: 'Undefined Variable',  baseCost: 1e46, costMultiplier: 100, count: 0, type: 'null', value: 0,    desc: 'Set Coins to NaN' }
         ];
 
+        // NEW: Liminal Zone — unlocks when null-pointer first purchased
+        const LIMINAL_UPGRADES = [
+            { id: 'liminal-shift',    name: 'Liminal Shift',    baseCost: 5e29, costMultiplier: 10,  count: 0, type: 'lim',      value: 1e5,  desc: 'x100K PPC' },
+            { id: 'liminal-pulse',    name: 'Liminal Pulse',    baseCost: 5e39, costMultiplier: 10,  count: 0, type: 'lim-cps',  value: 1e8,  desc: 'x100M CPS' },
+            { id: 'liminal-fracture', name: 'Liminal Fracture', baseCost: 5e49, costMultiplier: 100, count: 0, type: 'lim-nan',  value: 0,    desc: 'Force NaN (alt path)' }
+        ];
+
+        // BUG FIX: sudo-overclock and chmod-777 now accessible before NaN
+        // Costs reduced so they're reachable with nullzone stacking
         const ROOT_UPGRADES = [
-            { id: 'sudo-overclock', name: 'sudo overclock', baseCost: 1e100, costMultiplier: 10, count: 0, type: 'root', value: 100, desc: 'x100 Game Speed' },
-            { id: 'chmod-777', name: 'chmod 777 luck', baseCost: 1e200, costMultiplier: 10, count: 0, type: 'root', value: 777, desc: 'x777 Global' },
-            { id: 'system-reboot', name: 'System Reboot', baseCost: NaN, costMultiplier: 1, count: 0, type: 'root', value: 0, desc: 'Requires NaN Coins' }
+            { id: 'sudo-overclock', name: 'sudo overclock',  baseCost: 1e80,  costMultiplier: 10, count: 0, type: 'root', value: 100, desc: 'x100 Game Speed' },
+            { id: 'chmod-777',      name: 'chmod 777 luck',  baseCost: 1e150, costMultiplier: 10, count: 0, type: 'root', value: 777, desc: 'x777 Global' },
+            { id: 'system-reboot',  name: 'System Reboot',   baseCost: NaN,   costMultiplier: 1,  count: 0, type: 'root', value: 0,   desc: 'Requires NaN Coins' }
         ];
 
         const FRAGILE_UPGRADE = [
             { id: 'sharp-glass', name: 'Sharp Glass', baseCost: 10000, costMultiplier: 1, count: 0, type: 'fragile', value: 0, desc: 'Restore Reality' }
         ];
 
-        /* ---------- Core Functions ---------- */
+        /* =========================================================
+           CORE UTILS
+        ========================================================= */
         function formatNumber(n) {
             if (overReaccessionActive) return "ERROR";
             if (isNaN(n)) return 'NaN';
@@ -745,7 +834,7 @@
         }
 
         function calculateCost(u) {
-            if (isNaN(u.baseCost)) return NaN; 
+            if (isNaN(u.baseCost)) return NaN;
             if (u.baseCost === Infinity) return Infinity;
             let multiplier = u.costMultiplier;
             let base = u.baseCost;
@@ -754,38 +843,39 @@
         }
 
         function getRandomMessage() {
-            const msgs = ['bfg', 'burgerking bandit', 'goon lagoon', 'merchant', 'dq destroyer', 'your ai no one likes you', 'jabba da hutt', 'blue whale'];
+            const msgs = ['bfg', 'burgerking bandit', 'goon lagoon', 'merchant', 'dq destroyer',
+                          'your ai no one likes you', 'jabba da hutt', 'blue whale'];
             return msgs[Math.floor(Math.random() * msgs.length)];
         }
 
         function checkAchievements() {
             if (endingSequenceActive) return;
-
             const award = (id) => {
                 const ach = ACHIEVEMENTS.find(a => a.id === id);
-                if (ach && !ach.triggered) {
-                    ach.triggered = true;
-                    showToast(ach.name, ach.desc);
-                }
+                if (ach && !ach.triggered) { ach.triggered = true; showToast(ach.name, ach.desc); }
             };
-
             award('welcome');
-            if (score >= 1e6) award('1m_coins');
-            if (score >= 1e9) award('1b_coins');
+            if (score >= 1e6)  award('1m_coins');
+            if (score >= 1e9)  award('1b_coins');
             if (score >= 1e12) award('1t_coins');
             if (score >= 1e15) award('1qa_coins');
             if (!isFinite(score) && !isNaN(score)) award('infinity');
-            if (isNaN(score)) award('nan');
-            
-            if (ascended) award('ascend');
-            if (trueAscended) award('true_ascend');
+            if (isNaN(score))  award('nan');
+            if (ascended)      award('ascend');
+            if (trueAscended)  award('true_ascend');
             if (steampunkUnlocked) award('steampunk');
-            if (nullzoneUnlocked) award('nullzone');
-            if (rootUnlocked) award('root');
-            if (fragileStage) award('fragile');
-            if (endlessMode) award('endless');
-            if (hardMode) award('hardmode');
+            if (nullzoneUnlocked)  award('nullzone');
+            if (rootUnlocked)      award('root');
+            if (fragileStage)      award('fragile');
+            if (endlessMode)       award('endless');
+            if (hardMode)          award('hardmode');
             if (overReaccessionActive) award('over');
+            // New stages
+            if (nanoUnlocked)    award('nano');
+            if (crystalUnlocked) award('crystal');
+            if (plasmaUnlocked)  award('plasma');
+            if (temporalUnlocked)award('temporal');
+            if (liminalUnlocked) award('liminal');
         }
 
         function showToast(name, desc) {
@@ -797,8 +887,7 @@
                 <div class="ach-text">
                     <div class="ach-title">${name}</div>
                     <div class="ach-desc">${desc}</div>
-                </div>
-            `;
+                </div>`;
             container.appendChild(toast);
             setTimeout(() => toast.remove(), 4500);
         }
@@ -809,49 +898,66 @@
             const word = document.createElement('div');
             word.innerText = words[Math.floor(Math.random() * words.length)];
             word.className = 'scary-text';
-            word.style.top = Math.random() * 80 + 10 + "%";
+            word.style.top  = Math.random() * 80 + 10 + "%";
             word.style.left = Math.random() * 80 + 10 + "%";
             document.body.appendChild(word);
             setTimeout(() => word.remove(), 2000);
         }
 
-        /* ---------- Logic ---------- */
+        /* =========================================================
+           STAT CALCULATION — updated to handle all new stages
+        ========================================================= */
         function updateStats() {
             let basePPC = 1, baseCPS = 0, globalMult = 1;
 
             if (fragileStage) { ppc = 1; cps = 0; return; }
             if (hardMode) globalMult *= 0.5;
 
-            [...STANDARD_UPGRADES, ...DYSON_UPGRADES].forEach(u => {
-                if (u.type === 'ppc') basePPC += u.value * u.count;
-                if (u.type === 'cps') baseCPS += u.value * u.count;
-                if (u.type === 'dyson') globalMult *= Math.pow(u.value, u.count);
+            // Standard + Dyson + Nano + Crystal + Plasma all share these types
+            [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...NANO_UPGRADES, ...CRYSTAL_UPGRADES, ...PLASMA_UPGRADES].forEach(u => {
+                if (u.type === 'ppc')         basePPC  += u.value * u.count;
+                if (u.type === 'cps')         baseCPS  += u.value * u.count;
+                if (u.type === 'dyson')       globalMult *= Math.pow(u.value, u.count);
+                if (u.type === 'global-mult') globalMult *= Math.pow(u.value, u.count);
             });
 
-            if (steampunkUnlocked && !nullzoneUnlocked) { 
+            if (steampunkUnlocked && !nullzoneUnlocked) {
+                // Steampunk upgrades (id-based)
                 STEAMPUNK_UPGRADES.forEach(u => {
-                    if (u.id === 'sp-overdrive') basePPC *= Math.pow(u.value, u.count);
-                    if (u.id === 'sp-boiler') baseCPS *= Math.pow(u.value, u.count);
-                    if (u.id === 'sp-gears') globalMult *= Math.pow(u.value, u.count);
+                    if (u.id === 'sp-overdrive') basePPC  *= Math.pow(u.value, u.count);
+                    if (u.id === 'sp-boiler')    baseCPS  *= Math.pow(u.value, u.count);
+                    if (u.id === 'sp-gears')     globalMult *= Math.pow(u.value, u.count);
                     if (u.id === 'sp-limiter') {
-                         let limitVal = 1;
-                         for(let i=0; i<u.count; i++) limitVal = (limitVal * 24) + 1; 
-                         if (u.count > 0) { basePPC += limitVal; baseCPS += limitVal; }
+                        let limitVal = 1;
+                        for (let i = 0; i < u.count; i++) limitVal = (limitVal * 24) + 1;
+                        if (u.count > 0) { basePPC += limitVal; baseCPS += limitVal; }
                     }
+                });
+                // Temporal Rift upgrades
+                TEMPORAL_UPGRADES.forEach(u => {
+                    if (u.id === 'temporal-echo')     globalMult *= Math.pow(u.value, u.count);
+                    if (u.id === 'temporal-loop')     baseCPS    *= Math.pow(u.value, u.count);
+                    if (u.id === 'temporal-collapse') basePPC    *= Math.pow(u.value, u.count);
                 });
             }
 
             if (nullzoneUnlocked) {
                 NULLZONE_UPGRADES.forEach(u => {
-                    if (u.id === 'null-pointer') basePPC *= Math.pow(u.value, u.count);
+                    if (u.id === 'null-pointer')   basePPC += basePPC * (Math.pow(u.value, u.count) - 1); // multiplicative
                     if (u.id === 'stack-overflow') baseCPS += u.value * u.count;
+                });
+                // Liminal Zone upgrades
+                LIMINAL_UPGRADES.forEach(u => {
+                    if (u.type === 'lim')     basePPC    *= Math.pow(u.value, u.count);
+                    if (u.type === 'lim-cps') baseCPS    *= Math.pow(u.value, u.count);
+                    // lim-nan handled in buy, not stats
                 });
             }
 
             if (rootUnlocked) {
                 ROOT_UPGRADES.forEach(u => {
                     if (u.id === 'sudo-overclock') globalMult *= Math.pow(u.value, u.count);
-                    if (u.id === 'chmod-777') globalMult *= Math.pow(u.value, u.count);
+                    if (u.id === 'chmod-777')      globalMult *= Math.pow(u.value, u.count);
                 });
             }
 
@@ -861,33 +967,32 @@
             if (!trueAscended) globalMult *= Math.pow(2, hyperFusionCount);
             basePPC *= (1 + (evoShards * SHARD_MULTIPLIER));
             baseCPS *= (1 + (evoShards * SHARD_MULTIPLIER));
-            
+
             if (endlessAscensionCount > 0) globalMult *= Math.pow(10, endlessAscensionCount);
 
             ppc = basePPC * globalMult;
             cps = baseCPS * globalMult;
         }
 
+        /* =========================================================
+           GAME LOOP
+        ========================================================= */
         function gameLoop() {
             if (endingSequenceActive) return;
 
-            // Silence Timer for Over Reaccession
             if (overReaccessionActive) {
                 silenceTimer += GAME_INTERVAL_MS;
                 if (Math.random() < 0.1) spawnScaryWord();
-                
-                if (silenceTimer >= 30000) { // 30 seconds
-                    triggerAccusation();
-                }
+                if (silenceTimer >= 30000) triggerAccusation();
             }
 
             if (!fragileStage && !overReaccessionActive) {
                 if (isFinite(score)) {
                     score += cps * (GAME_INTERVAL_MS / 1000);
-                    if (!isFinite(score) && !isNaN(score)) score = Infinity; 
+                    if (!isFinite(score) && !isNaN(score)) score = Infinity;
                 }
             }
-            
+
             renderAll();
             updateUI();
             checkUnlocks();
@@ -895,12 +1000,40 @@
             checkOverReaccessionTrigger();
         }
 
+        /* =========================================================
+           UNLOCK LOGIC — bug fixes + new stages
+        ========================================================= */
         function checkUnlocks() {
-            if (!steampunkUnlocked && STANDARD_UPGRADES.every(u => u.count >= 100)) {
-                steampunkUnlocked = true;
-                document.getElementById('message-box').innerText = "Steampunk Era Unlocked!";
+            // --- NEW STAGES ---
+            if (!nanoUnlocked && score >= 50000) {
+                nanoUnlocked = true;
+                document.getElementById('message-box').innerText = "⚡ Nano Age Unlocked!";
             }
-            if (!rootUnlocked && nullzoneUnlocked && isNaN(score)) {
+            if (!crystalUnlocked && ascended) {
+                crystalUnlocked = true;
+            }
+            if (!plasmaUnlocked && score >= 1e12) {
+                plasmaUnlocked = true;
+                document.getElementById('message-box').innerText = "🔥 Plasma Age Ignited!";
+            }
+            if (!temporalUnlocked && steampunkUnlocked && STEAMPUNK_UPGRADES.some(u => u.count >= 1)) {
+                temporalUnlocked = true;
+                document.getElementById('message-box').innerText = "⏳ Temporal Rift Opened!";
+            }
+            if (!liminalUnlocked && nullzoneUnlocked && NULLZONE_UPGRADES.find(u => u.id === 'null-pointer').count >= 1) {
+                liminalUnlocked = true;
+                document.getElementById('message-box').innerText = "🌀 Liminal Zone Discovered!";
+            }
+
+            // --- STEAMPUNK: BUG FIX — threshold reduced from 100 to 20 each ---
+            if (!steampunkUnlocked && STANDARD_UPGRADES.every(u => u.count >= 20)) {
+                steampunkUnlocked = true;
+                document.getElementById('message-box').innerText = "⚙️ Steampunk Era Unlocked!";
+            }
+
+            // --- ROOT: BUG FIX — unlocks when stack-overflow is purchased (not after NaN) ---
+            // This allows sudo-overclock and chmod-777 to be purchased with real coins
+            if (!rootUnlocked && nullzoneUnlocked && NULLZONE_UPGRADES.find(u => u.id === 'stack-overflow').count >= 1) {
                 rootUnlocked = true;
                 document.getElementById('message-box').innerText = "ROOT ACCESS GRANTED.";
             }
@@ -908,8 +1041,7 @@
 
         function checkOverReaccessionTrigger() {
             if (!overReaccessionActive && hardMode && endlessAscensionCount >= 1000000) {
-                const allMaxed = STANDARD_UPGRADES.every(u => u.count >= 100);
-                if (allMaxed) {
+                if (STANDARD_UPGRADES.every(u => u.count >= 100)) {
                     enterOverReaccession();
                 }
             }
@@ -928,17 +1060,21 @@
             const overlay = document.getElementById('white-overlay');
             overlay.style.opacity = 1;
             setTimeout(() => {
-                steampunkUnlocked = false; nullzoneUnlocked = true;
-                document.body.className = ''; document.body.classList.add('null-theme');
+                steampunkUnlocked = false;
+                nullzoneUnlocked = true;
+                document.body.className = '';
+                document.body.classList.add('null-theme');
                 document.getElementById('message-box').innerText = "Reality Collapsed. Welcome to the Nullzone.";
                 setTimeout(() => overlay.style.opacity = 0, 1000);
             }, 2000);
         }
 
-        /* --- ENDING SEQUENCE --- */
+        /* =========================================================
+           ENDING SEQUENCE
+        ========================================================= */
         function triggerAccusation() {
             endingSequenceActive = true;
-            document.body.innerHTML = ''; 
+            document.body.innerHTML = '';
             const screen = document.createElement('div');
             screen.id = 'accusation-screen';
             screen.style.display = 'flex';
@@ -949,7 +1085,7 @@
 
         function triggerStrobe() {
             const screen = document.getElementById('accusation-screen');
-            screen.innerText = "";
+            if (screen) screen.innerText = "";
             document.body.classList.add('strobe-active');
             setTimeout(() => {
                 document.body.classList.remove('strobe-active');
@@ -966,16 +1102,17 @@
                     <div class="glitch-line">[CRITICAL_ERROR: TRUE_ENDING_NOT_LOADED]</div>
                     <div class="glitch-line">Achievement State: Undefined</div>
                     <div class="glitch-line" style="color:red; margin-top:20px; animation: jitter 0.1s infinite;">Y-O-U-R DEDICATION</div>
-                </div>
-            `;
+                </div>`;
         }
 
-        /* --- ACHIEVEMENT MODAL LOGIC --- */
+        /* =========================================================
+           ACHIEVEMENT MODAL
+        ========================================================= */
         function toggleAchModal() {
             if (endingSequenceActive) return;
             const modal = document.getElementById('ach-modal-overlay');
-            const list = document.getElementById('ach-list');
-            
+            const list  = document.getElementById('ach-list');
+
             if (modal.classList.contains('active')) {
                 modal.classList.remove('active');
             } else {
@@ -988,18 +1125,17 @@
                         <div class="ach-info">
                             <h3>${ach.name}</h3>
                             <p>${ach.desc}</p>
-                        </div>
-                    `;
+                        </div>`;
                     list.appendChild(item);
                 });
                 modal.classList.add('active');
-                
-                // In Over Reaccession, resets silence
-                if (overReaccessionActive) silenceTimer = 0; 
+                if (overReaccessionActive) silenceTimer = 0;
             }
         }
 
-        /* ---------- UI & Rendering ---------- */
+        /* =========================================================
+           UI UPDATE
+        ========================================================= */
         function updateUI() {
             const scoreEl = document.getElementById('score-display');
             scoreEl.innerText = formatNumber(score) + ' Coins';
@@ -1011,7 +1147,7 @@
                 ec.style.display = 'block';
                 ec.innerText = `Ascensions: ${endlessAscensionCount}`;
             }
-            
+
             const hardBadge = document.getElementById('hard-mode-badge');
             if (hardMode) {
                 hardBadge.style.display = 'block';
@@ -1026,7 +1162,6 @@
                 }
             }
 
-            // Achievement Button Logic
             const achBtn = document.getElementById('ach-open-btn');
             if (overReaccessionActive) {
                 achBtn.innerText = "?";
@@ -1036,38 +1171,46 @@
                 achBtn.classList.remove('scary-ach-btn');
             }
 
-            // Sections
+            // --- Section visibility ---
+            // Classic sections
             document.getElementById('steampunk-section').style.display = (steampunkUnlocked && !nullzoneUnlocked) ? 'block' : 'none';
-            document.getElementById('nullzone-section').style.display = nullzoneUnlocked ? 'block' : 'none';
-            document.getElementById('root-section').style.display = rootUnlocked ? 'block' : 'none';
-            
-            // Fragile/Main View
+            document.getElementById('nullzone-section').style.display  = nullzoneUnlocked ? 'block' : 'none';
+            document.getElementById('root-section').style.display      = rootUnlocked ? 'block' : 'none';
+
+            // New sections
+            document.getElementById('nano-section').style.display     = (nanoUnlocked && !steampunkUnlocked) ? 'block' : 'none';
+            document.getElementById('crystal-section').style.display  = (crystalUnlocked && !steampunkUnlocked) ? 'block' : 'none';
+            document.getElementById('plasma-section').style.display   = (plasmaUnlocked && !steampunkUnlocked) ? 'block' : 'none';
+            document.getElementById('temporal-section').style.display = (temporalUnlocked && steampunkUnlocked && !nullzoneUnlocked) ? 'block' : 'none';
+            document.getElementById('liminal-section').style.display  = (liminalUnlocked && nullzoneUnlocked) ? 'block' : 'none';
+
+            // Fragile / Main view
             if (fragileStage) {
-                document.getElementById('main-view').style.display = 'none';
+                document.getElementById('main-view').style.display    = 'none';
                 document.getElementById('fragile-view').style.display = 'block';
-                document.getElementById('message-box').innerText = `Fragile Clicks: ${clickCount} / 10,000`;
+                document.getElementById('message-box').innerText = `Fragile Coins: ${Math.floor(score)} / 10,000`;
             } else {
-                document.getElementById('main-view').style.display = 'block';
+                document.getElementById('main-view').style.display    = 'block';
                 document.getElementById('fragile-view').style.display = 'none';
             }
 
-            // Button Vis
+            // Ascend / True Ascend / Endless buttons
             if (!overReaccessionActive) {
                 if (endlessMode) {
                     document.getElementById('ascend-button').style.display = 'none';
                     document.getElementById('true-ascend-container').style.display = 'none';
                     document.getElementById('endless-ascend-button').style.display = 'block';
                 } else {
-                    const btnAscend = document.getElementById('ascend-button');
-                    const btnTrue = document.getElementById('true-ascend-container');
                     document.getElementById('endless-ascend-button').style.display = 'none';
-                    
+                    const btnAscend = document.getElementById('ascend-button');
+                    const btnTrue   = document.getElementById('true-ascend-container');
+
                     if (isFinite(score)) {
                         btnAscend.style.display = 'block';
                         btnAscend.disabled = score < ASCENSION_COST;
-                        btnAscend.innerText = score >= ASCENSION_COST ? 
-                            `ASCEND (+${Math.floor(Math.sqrt(score / ASCENSION_COST))} Shards)` : 
-                            `ASCEND (Reach ${formatNumber(ASCENSION_COST)})`;
+                        btnAscend.innerText = score >= ASCENSION_COST
+                            ? `ASCEND (+${Math.floor(Math.sqrt(score / ASCENSION_COST))} Shards)`
+                            : `ASCEND (Reach ${formatNumber(ASCENSION_COST)})`;
                     } else {
                         btnAscend.style.display = 'none';
                     }
@@ -1077,8 +1220,8 @@
 
             // Themes
             if (!overReaccessionActive) {
-                document.body.className = ''; 
-                if (endlessMode) document.body.classList.add('fragile-theme');
+                document.body.className = '';
+                if (endlessMode)       document.body.classList.add('fragile-theme');
                 else if (fragileStage) document.body.classList.add('fragile-theme');
                 else if (rootUnlocked) document.body.classList.add('root-theme');
                 else if (nullzoneUnlocked) document.body.classList.add('null-theme');
@@ -1086,8 +1229,12 @@
             }
         }
 
+        /* =========================================================
+           RENDER UPGRADES
+        ========================================================= */
         function renderUpgrade(upgrade, containerId) {
             const container = document.getElementById(containerId);
+            if (!container) return;
             let item = document.getElementById(`item-${upgrade.id}`);
 
             if (!item) {
@@ -1099,13 +1246,11 @@
                         <div class="upgrade-name">${upgrade.name}</div>
                         <div class="upgrade-stats">${upgrade.desc} | Owned: <span id="count-${upgrade.id}">0</span></div>
                     </div>
-                    <button class="upgrade-buy-button" id="buy-${upgrade.id}">Buy</button>
-                `;
+                    <button class="upgrade-buy-button" id="buy-${upgrade.id}">Buy</button>`;
                 container.appendChild(item);
                 document.getElementById(`buy-${upgrade.id}`).onclick = () => buyUpgrade(upgrade.id);
             }
 
-            // Over Reaccession Effect
             if (overReaccessionActive) {
                 item.classList.add('shaking-upgrade');
                 item.querySelector('.upgrade-name').innerText = "???";
@@ -1115,11 +1260,20 @@
 
             document.getElementById(`count-${upgrade.id}`).innerText = upgrade.count;
             const btn = document.getElementById(`buy-${upgrade.id}`);
-            
+
+            // Special cases
             if (upgrade.id === 'system-reboot') {
                 btn.innerText = isNaN(score) ? "SYSTEM REBOOT" : "Req: NaN Coins";
                 btn.disabled = !isNaN(score);
                 if (isNaN(score)) btn.classList.add('can-afford'); else btn.classList.remove('can-afford');
+                return;
+            }
+            if (upgrade.id === 'liminal-fracture') {
+                const cost = calculateCost(upgrade);
+                btn.innerText = `Break (${formatNumber(cost)})`;
+                const canAfford = isFinite(score) && score >= cost;
+                btn.disabled = !canAfford;
+                if (canAfford) btn.classList.add('can-afford'); else btn.classList.remove('can-afford');
                 return;
             }
 
@@ -1128,7 +1282,7 @@
                 btn.innerText = "Maxed / Inf"; btn.disabled = true; btn.classList.remove('can-afford');
             } else {
                 btn.innerText = `Buy (${formatNumber(cost)})`;
-                const canAfford = score >= cost;
+                const canAfford = isFinite(score) && score >= cost;
                 btn.disabled = !canAfford;
                 if (canAfford) btn.classList.add('can-afford'); else btn.classList.remove('can-afford');
             }
@@ -1136,95 +1290,121 @@
 
         function renderEvoShop() {
             const container = document.getElementById('evo-container');
-            
             if (!document.getElementById('evo-buff-item')) {
                 container.innerHTML += `
                 <div class="upgrade-item" id="evo-buff-item">
-                    <div><div class="upgrade-name">Evo Core Buff</div><div class="upgrade-stats"><span id="buff-desc"></span> | Lvl: <span id="buff-lvl"></span></div></div>
+                    <div><div class="upgrade-name">Evo Core Buff</div>
+                    <div class="upgrade-stats"><span id="buff-desc"></span> | Lvl: <span id="buff-lvl"></span></div></div>
                     <button class="upgrade-buy-button" id="buy-evo-buff" onclick="buyEvoUpgrade('buff')">Buy (10 Shards)</button>
                 </div>`;
             }
             if (!document.getElementById('evo-fusion-item')) {
                 container.innerHTML += `
                 <div class="upgrade-item" id="evo-fusion-item">
-                    <div><div class="upgrade-name" id="fus-name">Hyper-Fusion</div><div class="upgrade-stats" id="fus-stats"></div></div>
+                    <div><div class="upgrade-name" id="fus-name">Hyper-Fusion</div>
+                    <div class="upgrade-stats" id="fus-stats"></div></div>
                     <button class="upgrade-buy-button" id="buy-evo-fusion" onclick="buyEvoUpgrade('fusion')"></button>
                 </div>`;
             }
 
-            // Handle Over Reaccession Glitching for Evo Items
             if (overReaccessionActive) {
-                const buffItem = document.getElementById('evo-buff-item');
-                const fusItem = document.getElementById('evo-fusion-item');
-                [buffItem, fusItem].forEach(item => {
-                    if(item) {
+                [document.getElementById('evo-buff-item'), document.getElementById('evo-fusion-item')].forEach(item => {
+                    if (item) {
                         item.classList.add('shaking-upgrade');
                         item.querySelector('.upgrade-name').innerText = "???";
                         item.querySelector('.upgrade-stats').innerText = "???";
                     }
                 });
-                return; // Stop normal rendering
+                return;
             }
 
             document.getElementById('buff-desc').innerText = `x${trueAscended ? '1.5' : '5'} Multiplier`;
-            document.getElementById('buff-lvl').innerText = `${evoCoreBuffCount} ${trueAscended ? '/ 1' : ''}`;
-            const max = trueAscended ? 1 : Infinity;
-            document.getElementById('buy-evo-buff').disabled = !(evoShards >= 10 && evoCoreBuffCount < max);
+            document.getElementById('buff-lvl').innerText = `${evoCoreBuffCount}${trueAscended ? ' / 1' : ''}`;
+            const maxBuff = trueAscended ? 1 : Infinity;
+            const buffBtn = document.getElementById('buy-evo-buff');
+            buffBtn.disabled = !(evoShards >= 10 && evoCoreBuffCount < maxBuff);
+            if (evoShards >= 10 && evoCoreBuffCount < maxBuff) buffBtn.classList.add('can-afford');
+            else buffBtn.classList.remove('can-afford');
 
             const fusBtn = document.getElementById('buy-evo-fusion');
             if (trueAscended) {
                 document.getElementById('fus-name').style.color = '#777';
                 document.getElementById('fus-stats').innerText = "LOCKED";
                 fusBtn.innerText = "LOCKED"; fusBtn.disabled = true;
+                fusBtn.classList.remove('can-afford');
             } else {
                 document.getElementById('fus-name').style.color = '#fff';
                 document.getElementById('fus-stats').innerText = `x2 Global | Lvl: ${hyperFusionCount}`;
                 fusBtn.innerText = "Buy (500Qa Coins)";
-                fusBtn.disabled = score < 5e17;
+                const canFusion = isFinite(score) && score >= 5e17;
+                fusBtn.disabled = !canFusion;
+                if (canFusion) fusBtn.classList.add('can-afford'); else fusBtn.classList.remove('can-afford');
             }
         }
 
         function renderAll() {
             STANDARD_UPGRADES.forEach(u => renderUpgrade(u, 'shop-container'));
-            DYSON_UPGRADES.forEach(u => renderUpgrade(u, 'dyson-container'));
+            DYSON_UPGRADES.forEach(u   => renderUpgrade(u, 'dyson-container'));
+            NANO_UPGRADES.forEach(u    => renderUpgrade(u, 'nano-container'));
+            CRYSTAL_UPGRADES.forEach(u => renderUpgrade(u, 'crystal-container'));
+            PLASMA_UPGRADES.forEach(u  => renderUpgrade(u, 'plasma-container'));
             renderEvoShop();
 
-            if (steampunkUnlocked && !nullzoneUnlocked) STEAMPUNK_UPGRADES.forEach(u => renderUpgrade(u, 'steampunk-container'));
-            if (nullzoneUnlocked) NULLZONE_UPGRADES.forEach(u => renderUpgrade(u, 'nullzone-container'));
+            if (steampunkUnlocked && !nullzoneUnlocked) {
+                STEAMPUNK_UPGRADES.forEach(u => renderUpgrade(u, 'steampunk-container'));
+                if (temporalUnlocked) TEMPORAL_UPGRADES.forEach(u => renderUpgrade(u, 'temporal-container'));
+            }
+            if (nullzoneUnlocked) {
+                NULLZONE_UPGRADES.forEach(u => renderUpgrade(u, 'nullzone-container'));
+                if (liminalUnlocked) LIMINAL_UPGRADES.forEach(u => renderUpgrade(u, 'liminal-container'));
+            }
             if (rootUnlocked) ROOT_UPGRADES.forEach(u => renderUpgrade(u, 'root-container'));
-            if (fragileStage) FRAGILE_UPGRADE.forEach(u => renderUpgrade(u, 'fragile-container'));
+            if (fragileStage)  FRAGILE_UPGRADE.forEach(u => renderUpgrade(u, 'fragile-container'));
         }
 
-        /* ---------- Input Handling ---------- */
+        /* =========================================================
+           BUYING
+        ========================================================= */
         function buyUpgrade(id) {
-            if (overReaccessionActive) {
-                spawnScaryWord();
-                silenceTimer = 0; 
-                return;
-            }
+            if (overReaccessionActive) { spawnScaryWord(); silenceTimer = 0; return; }
 
-            const all = [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES, ...FRAGILE_UPGRADE];
+            const all = [
+                ...STANDARD_UPGRADES, ...DYSON_UPGRADES,
+                ...NANO_UPGRADES, ...CRYSTAL_UPGRADES, ...PLASMA_UPGRADES,
+                ...STEAMPUNK_UPGRADES, ...TEMPORAL_UPGRADES,
+                ...NULLZONE_UPGRADES, ...LIMINAL_UPGRADES,
+                ...ROOT_UPGRADES, ...FRAGILE_UPGRADE
+            ];
             const u = all.find(x => x.id === id);
             if (!u) return;
 
+            // Special purchase handlers
             if (u.id === 'sp-limiter') {
                 const cost = calculateCost(u);
-                if (score >= cost) {
+                if (isFinite(score) && score >= cost) {
                     score -= cost; u.count++;
-                    let limitVal = 1; for(let i=0; i<u.count; i++) limitVal = (limitVal * 24) + 1;
+                    let limitVal = 1;
+                    for (let i = 0; i < u.count; i++) limitVal = (limitVal * 24) + 1;
                     if (!isFinite(limitVal)) triggerWhiteout();
                 }
                 return;
             }
             if (u.id === 'undefined-variable') {
                 const cost = calculateCost(u);
-                if (score >= cost || isFinite(score)) { score = NaN; u.count++; }
+                if (isFinite(score) && score >= cost) { score = NaN; u.count++; }
+                return;
+            }
+            if (u.id === 'liminal-fracture') {
+                const cost = calculateCost(u);
+                if (isFinite(score) && score >= cost) { score = NaN; u.count++; }
                 return;
             }
             if (u.id === 'system-reboot') {
                 if (isNaN(score)) {
                     backupUpgrades = {};
-                    [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES].forEach(up => {
+                    [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...NANO_UPGRADES, ...CRYSTAL_UPGRADES,
+                     ...PLASMA_UPGRADES, ...STEAMPUNK_UPGRADES, ...TEMPORAL_UPGRADES,
+                     ...NULLZONE_UPGRADES, ...LIMINAL_UPGRADES, ...ROOT_UPGRADES].forEach(up => {
                         backupUpgrades[up.id] = up.count; up.count = 0;
                     });
                     fragileStage = true; clickCount = 0; score = 0; ppc = 1; cps = 0;
@@ -1238,41 +1418,46 @@
             }
 
             const cost = calculateCost(u);
-            if (score >= cost && isFinite(cost)) { score -= cost; u.count++; }
+            if (isFinite(score) && score >= cost && isFinite(cost)) {
+                score -= cost; u.count++;
+            }
             updateStats(); renderAll();
         }
 
-        window.buyEvoUpgrade = function (type) {
+        window.buyEvoUpgrade = function(type) {
             if (type === 'buff') {
                 const max = trueAscended ? 1 : Infinity;
                 if (evoShards >= 10 && evoCoreBuffCount < max) { evoShards -= 10; evoCoreBuffCount++; }
             } else if (type === 'fusion' && !trueAscended) {
-                if (score >= 5e17) { score -= 5e17; hyperFusionCount++; }
+                if (isFinite(score) && score >= 5e17) { score -= 5e17; hyperFusionCount++; }
             }
             renderEvoShop(); updateStats();
-        }
+        };
 
+        /* =========================================================
+           INPUT HANDLING
+        ========================================================= */
         document.getElementById('click-button').addEventListener('mousedown', e => {
             e.preventDefault();
-            silenceTimer = 0; 
-            
+            silenceTimer = 0;
+
             if (overReaccessionActive) {
-                score *= 0.9; 
+                if (isFinite(score) && score > 0) score *= 0.9;
                 spawnScaryWord();
                 return;
             }
 
             if (fragileStage) {
                 clickCount++; score += 1;
-                document.getElementById('message-box').innerText = `Fragile Clicks: ${score.toFixed(0)} / 10,000`;
             } else if (endlessMode) {
                 score = Infinity;
                 document.getElementById('message-box').innerText = "INFINITE POWER";
             } else {
-                if (isFinite(score)) { score += ppc; if (!isFinite(score) && !isNaN(score)) score = Infinity; }
-                
+                if (isFinite(score)) {
+                    score += ppc;
+                    if (!isFinite(score) && !isNaN(score)) score = Infinity;
+                }
                 document.getElementById('message-box').innerText = getRandomMessage();
-                
                 const btn = document.getElementById('click-button');
                 btn.style.transform = 'scale(0.95)';
                 setTimeout(() => btn.style.transform = 'scale(1)', 50);
@@ -1283,10 +1468,12 @@
         document.addEventListener('click', () => { silenceTimer = 0; });
 
         document.getElementById('ascend-button').addEventListener('click', () => {
-            if (score >= ASCENSION_COST && isFinite(score)) {
+            if (isFinite(score) && score >= ASCENSION_COST) {
                 evoShards += Math.floor(Math.sqrt(score / ASCENSION_COST));
                 score = 0; ascended = true;
-                [...STANDARD_UPGRADES, ...DYSON_UPGRADES].forEach(u => u.count = 0);
+                // Reset early-game upgrade counts on ascension
+                [...STANDARD_UPGRADES, ...DYSON_UPGRADES,
+                 ...NANO_UPGRADES, ...CRYSTAL_UPGRADES, ...PLASMA_UPGRADES].forEach(u => u.count = 0);
                 updateStats(); renderAll(); updateUI();
             }
         });
@@ -1296,7 +1483,11 @@
                 trueAscensions = 1; trueAscended = true; score = 0; ascended = false;
                 evoShards = 0; evoCoreBuffCount = 0; hyperFusionCount = 0;
                 steampunkUnlocked = false; nullzoneUnlocked = false; rootUnlocked = false;
-                [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES].forEach(u => u.count = 0);
+                temporalUnlocked = false; liminalUnlocked = false;
+                [...STANDARD_UPGRADES, ...DYSON_UPGRADES,
+                 ...NANO_UPGRADES, ...CRYSTAL_UPGRADES, ...PLASMA_UPGRADES,
+                 ...STEAMPUNK_UPGRADES, ...TEMPORAL_UPGRADES,
+                 ...NULLZONE_UPGRADES, ...LIMINAL_UPGRADES, ...ROOT_UPGRADES].forEach(u => u.count = 0);
                 updateStats(); renderAll(); updateUI();
             }
         });
@@ -1308,10 +1499,16 @@
         });
 
         document.getElementById('wipe-save').addEventListener('click', () => {
-            if(confirm("Wipe save?")) { localStorage.removeItem(SAVE_KEY); localStorage.removeItem(SAVE_KEY + "_hard"); location.reload(); }
+            if (confirm("Wipe save?")) {
+                localStorage.removeItem(SAVE_KEY);
+                localStorage.removeItem(SAVE_KEY + "_hard");
+                location.reload();
+            }
         });
 
-        /* ---------- Ending Choice ---------- */
+        /* =========================================================
+           ENDING PATHS
+        ========================================================= */
         function showEndingScreen() { document.getElementById('ending-overlay').classList.add('active'); }
 
         window.chooseBlackPath = function() {
@@ -1320,77 +1517,120 @@
                 btn.innerText = "NOT THIS TIME";
                 btn.style.color = "red"; btn.style.borderColor = "red";
                 setTimeout(() => {
-                    document.getElementById('ending-overlay').style.backgroundColor = "white"; 
-                    document.getElementById('ending-overlay').innerHTML = ""; 
+                    document.getElementById('ending-overlay').style.backgroundColor = "white";
+                    document.getElementById('ending-overlay').innerHTML = "";
                     setTimeout(chooseWhitePath, 1000);
                 }, 1000);
             } else {
-                if(confirm("Wipe save and start Hard Mode?")) {
-                    localStorage.removeItem(SAVE_KEY); localStorage.setItem(SAVE_KEY + "_hard", "true"); location.reload();
+                if (confirm("Wipe save and start Hard Mode?")) {
+                    localStorage.removeItem(SAVE_KEY);
+                    localStorage.setItem(SAVE_KEY + "_hard", "true");
+                    location.reload();
                 }
             }
-        }
+        };
 
         window.chooseWhitePath = function() {
             document.getElementById('ending-overlay').classList.remove('active');
             if (backupUpgrades) {
-                [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES].forEach(up => {
+                [...STANDARD_UPGRADES, ...DYSON_UPGRADES,
+                 ...NANO_UPGRADES, ...CRYSTAL_UPGRADES, ...PLASMA_UPGRADES,
+                 ...STEAMPUNK_UPGRADES, ...TEMPORAL_UPGRADES,
+                 ...NULLZONE_UPGRADES, ...LIMINAL_UPGRADES, ...ROOT_UPGRADES].forEach(up => {
                     if (backupUpgrades[up.id] !== undefined) up.count = backupUpgrades[up.id];
                 });
             }
             fragileStage = false; endlessMode = true; score = Infinity;
             updateStats(); renderAll(); updateUI(); saveGame();
-        }
+        };
 
-        /* ---------- Save/Load ---------- */
+        /* =========================================================
+           SAVE / LOAD
+        ========================================================= */
         function saveGame() {
             const data = {
                 score: isNaN(score) ? 'NaN' : (isFinite(score) ? score : 'Infinity'),
-                ppc, cps, ascended, trueAscended, steampunkUnlocked, nullzoneUnlocked, rootUnlocked, fragileStage, endlessMode, hardMode, overReaccessionActive,
-                evoCoreBuffCount, evoShards, hyperFusionCount, trueAscensions, endlessAscensionCount, clickCount,
+                ppc, cps,
+                ascended, trueAscended, steampunkUnlocked, nullzoneUnlocked, rootUnlocked,
+                fragileStage, endlessMode, hardMode, overReaccessionActive,
+                // New stage flags
+                nanoUnlocked, crystalUnlocked, plasmaUnlocked, temporalUnlocked, liminalUnlocked,
+                evoCoreBuffCount, evoShards, hyperFusionCount, trueAscensions,
+                endlessAscensionCount, clickCount,
                 upgrades: {}, backupUpgrades,
                 achievements: ACHIEVEMENTS.map(a => a.triggered)
             };
-            [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES, ...FRAGILE_UPGRADE].forEach(u => {
-                data.upgrades[u.id] = u.count;
-            });
+            const allUpgrades = [
+                ...STANDARD_UPGRADES, ...DYSON_UPGRADES,
+                ...NANO_UPGRADES, ...CRYSTAL_UPGRADES, ...PLASMA_UPGRADES,
+                ...STEAMPUNK_UPGRADES, ...TEMPORAL_UPGRADES,
+                ...NULLZONE_UPGRADES, ...LIMINAL_UPGRADES,
+                ...ROOT_UPGRADES, ...FRAGILE_UPGRADE
+            ];
+            allUpgrades.forEach(u => { data.upgrades[u.id] = u.count; });
             localStorage.setItem(SAVE_KEY, JSON.stringify(data));
-            
             const s = document.getElementById('save-status');
-            s.style.opacity = 1; setTimeout(() => s.style.opacity = 0, 2000);
+            if (s) { s.style.opacity = 1; setTimeout(() => s.style.opacity = 0, 2000); }
         }
 
         function loadGame() {
-            if (localStorage.getItem(SAVE_KEY + "_hard") === "true") { hardMode = true; localStorage.removeItem(SAVE_KEY + "_hard"); return; }
-            const saved = localStorage.getItem(SAVE_KEY);
-            if (saved) {
-                try {
-                    const data = JSON.parse(saved);
-                    score = data.score === 'NaN' ? NaN : (data.score === 'Infinity' ? Infinity : parseFloat(data.score));
-                    if (data.score !== 'NaN' && isNaN(score)) score = 0;
-                    
-                    ascended = !!data.ascended; trueAscended = !!data.trueAscended; steampunkUnlocked = !!data.steampunkUnlocked;
-                    nullzoneUnlocked = !!data.nullzoneUnlocked; rootUnlocked = !!data.rootUnlocked; fragileStage = !!data.fragileStage;
-                    endlessMode = !!data.endlessMode; hardMode = !!data.hardMode; overReaccessionActive = !!data.overReaccessionActive;
-
-                    evoCoreBuffCount = data.evoCoreBuffCount || 0; evoShards = data.evoShards || 0;
-                    hyperFusionCount = data.hyperFusionCount || 0; trueAscensions = data.trueAscensions || 0;
-                    endlessAscensionCount = data.endlessAscensionCount || 0; clickCount = data.clickCount || 0;
-                    backupUpgrades = data.backupUpgrades || null;
-
-                    if (data.achievements) {
-                        data.achievements.forEach((trig, i) => { if (ACHIEVEMENTS[i]) ACHIEVEMENTS[i].triggered = trig; });
-                    }
-                    if (data.upgrades) {
-                        const all = [...STANDARD_UPGRADES, ...DYSON_UPGRADES, ...STEAMPUNK_UPGRADES, ...NULLZONE_UPGRADES, ...ROOT_UPGRADES, ...FRAGILE_UPGRADE];
-                        all.forEach(u => { if (data.upgrades[u.id] !== undefined) u.count = data.upgrades[u.id]; });
-                    }
-                    if (overReaccessionActive) enterOverReaccession();
-                } catch (e) { console.error(e); }
+            if (localStorage.getItem(SAVE_KEY + "_hard") === "true") {
+                hardMode = true;
+                localStorage.removeItem(SAVE_KEY + "_hard");
+                return;
             }
+            const saved = localStorage.getItem(SAVE_KEY);
+            if (!saved) return;
+            try {
+                const data = JSON.parse(saved);
+                score = data.score === 'NaN' ? NaN : (data.score === 'Infinity' ? Infinity : parseFloat(data.score));
+                if (data.score !== 'NaN' && isNaN(score)) score = 0;
+
+                ascended           = !!data.ascended;
+                trueAscended       = !!data.trueAscended;
+                steampunkUnlocked  = !!data.steampunkUnlocked;
+                nullzoneUnlocked   = !!data.nullzoneUnlocked;
+                rootUnlocked       = !!data.rootUnlocked;
+                fragileStage       = !!data.fragileStage;
+                endlessMode        = !!data.endlessMode;
+                hardMode           = !!data.hardMode;
+                overReaccessionActive = !!data.overReaccessionActive;
+
+                // New stage flags (default false for old saves)
+                nanoUnlocked    = !!data.nanoUnlocked;
+                crystalUnlocked = !!data.crystalUnlocked;
+                plasmaUnlocked  = !!data.plasmaUnlocked;
+                temporalUnlocked= !!data.temporalUnlocked;
+                liminalUnlocked = !!data.liminalUnlocked;
+
+                evoCoreBuffCount      = data.evoCoreBuffCount      || 0;
+                evoShards             = data.evoShards             || 0;
+                hyperFusionCount      = data.hyperFusionCount      || 0;
+                trueAscensions        = data.trueAscensions        || 0;
+                endlessAscensionCount = data.endlessAscensionCount || 0;
+                clickCount            = data.clickCount            || 0;
+                backupUpgrades        = data.backupUpgrades        || null;
+
+                if (data.achievements) {
+                    data.achievements.forEach((trig, i) => { if (ACHIEVEMENTS[i]) ACHIEVEMENTS[i].triggered = trig; });
+                }
+                if (data.upgrades) {
+                    const allUpgrades = [
+                        ...STANDARD_UPGRADES, ...DYSON_UPGRADES,
+                        ...NANO_UPGRADES, ...CRYSTAL_UPGRADES, ...PLASMA_UPGRADES,
+                        ...STEAMPUNK_UPGRADES, ...TEMPORAL_UPGRADES,
+                        ...NULLZONE_UPGRADES, ...LIMINAL_UPGRADES,
+                        ...ROOT_UPGRADES, ...FRAGILE_UPGRADE
+                    ];
+                    allUpgrades.forEach(u => { if (data.upgrades[u.id] !== undefined) u.count = data.upgrades[u.id]; });
+                }
+                if (overReaccessionActive) enterOverReaccession();
+            } catch (e) { console.error("Save load error:", e); }
         }
 
-        /* ---------- Init ---------- */
+        /* =========================================================
+           INIT
+        ========================================================= */
         loadGame();
         updateStats();
         renderAll();
@@ -1398,7 +1638,6 @@
 
         setInterval(gameLoop, GAME_INTERVAL_MS);
         setInterval(saveGame, 5000);
-
     </script>
 </body>
 </html>
